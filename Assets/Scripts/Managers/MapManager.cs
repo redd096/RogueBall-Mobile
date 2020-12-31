@@ -38,6 +38,10 @@ public class MapManager : MonoBehaviour
         //reset map
         map.Clear();
 
+        //be sure there is something before start
+        if (waypointsByOrder == null || waypoints.Length <= 0)
+            return;
+
         int currentY = Mathf.RoundToInt(waypointsByOrder[0].transform.position.y);
         int x = 0;
         int y = 0;
