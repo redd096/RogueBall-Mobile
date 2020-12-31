@@ -89,8 +89,8 @@ public abstract class PlayerMovement : MonoBehaviour
         }
 
 
-        //swing
-        Swing(direction.normalized);
+        //swing (direction using 1 and -1)
+        Swing(direction);
     }
 
     protected abstract void Swing(Vector2 direction);
