@@ -16,10 +16,19 @@ public class MovementOleoso : PlayerMovement
 
     protected override void Swing(Vector2 direction)
     {
+        TempFunction();
+
         //move - reset speed or add force
         if (resetSpeed)
             rb.velocity = direction.normalized * force;
         else
             rb.AddForce(direction.normalized * force, ForceMode2D.Impulse);
+    }
+
+    void TempFunction()
+    {
+        //be sure to have rigidbody saved
+        if (rb == null)
+            rb = GetComponent<Rigidbody2D>();
     }
 }

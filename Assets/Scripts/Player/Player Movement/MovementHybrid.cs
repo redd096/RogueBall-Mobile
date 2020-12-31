@@ -25,6 +25,8 @@ public class MovementHybrid : PlayerMovement
         //if no coroutine, start movement in direction
         if (movementCoroutine == null)
         {
+            TempFunction();
+
             Vector2Int directionInt = new Vector2Int(Mathf.RoundToInt(direction.x), Mathf.RoundToInt(direction.y));
 
             movementCoroutine = StartCoroutine(MovementCoroutine(directionInt));
@@ -56,5 +58,12 @@ public class MovementHybrid : PlayerMovement
         }
 
         movementCoroutine = null;
+    }
+
+    void TempFunction()
+    {
+        //be sure to have current waypoint
+        if(currentWaypoint == null)
+            currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(transform.position, out currentKey);
     }
 }
