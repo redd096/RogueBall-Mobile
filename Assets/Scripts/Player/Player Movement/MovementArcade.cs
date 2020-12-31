@@ -6,9 +6,9 @@ using redd096;
 public class MovementArcade : PlayerMovement
 {
     [Header("Arcade")]
-    [Tooltip("Duration movement from one waypoint to another")] [SerializeField] float timeMovement = 0.5f;
-    [Tooltip("Time to stay in new waypoint before come back to start waypoint")] [SerializeField] float timeBeforeComeBack = 0.5f;
-    [Tooltip("Duration movement to come back to start waypoint")] [SerializeField] float timeComeBack = 0.2f;
+    [Tooltip("Duration movement from one waypoint to another")] [SerializeField] float timeMovement = 0.3f;
+    [Tooltip("Time to stay in new waypoint before come back to start waypoint")] [SerializeField] float timeBeforeComeBack = 0.1f;
+    [Tooltip("Duration movement to come back to start waypoint")] [SerializeField] float timeComeBack = 0.3f;
 
     Transform currentWaypoint;
     Vector2Int currentKey;

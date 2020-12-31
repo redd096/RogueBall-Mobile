@@ -63,7 +63,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2790818334622962260}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3baff1daa6035e4bb28773ebf16a3b8, type: 3}
   m_Name: 
@@ -85,12 +85,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5594165d62cde40bc1782c43168879, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDiagonal: 0
+  moveDiagonal: 1
   timeToRelease: 1
-  deadZone: 100
-  timeMovement: 0.5
-  timeBeforeComeBack: 0.5
-  timeComeBack: 0.2
+  deadZone: 150
+  timeMovement: 0.3
+  timeBeforeComeBack: 0.1
+  timeComeBack: 0.3
 --- !u!114 &7166535232373902449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2790818334622962260}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: edd739ed7269c0c45a0d674faf0b97ae, type: 3}
   m_Name: 
@@ -106,7 +106,7 @@ MonoBehaviour:
   moveDiagonal: 0
   timeToRelease: 1
   deadZone: 100
-  timeMovement: 0.5
+  timeMovement: 0.3
 --- !u!1 &5208944050749502059
 GameObject:
   m_ObjectHideFlags: 0

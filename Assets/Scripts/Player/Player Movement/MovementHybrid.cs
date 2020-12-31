@@ -6,7 +6,7 @@ using redd096;
 public class MovementHybrid : PlayerMovement
 {
     [Header("Hybrid")]
-    [Tooltip("Duration movement from one waypoint to another")] [SerializeField] float timeMovement = 0.5f;
+    [Tooltip("Duration movement from one waypoint to another")] [SerializeField] float timeMovement = 0.3f;
 
     Transform currentWaypoint;
     Vector2Int currentKey;
