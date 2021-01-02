@@ -66,4 +66,19 @@ public class MovementHybrid : PlayerMovement
         if(currentWaypoint == null)
             currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(transform.position, out currentKey);
     }
+
+    public void ToggleDiagonal(bool diagonal)
+    {
+        moveDiagonal = diagonal;
+    }
+
+
+    [SerializeField] UnityEngine.UI.Text deadZoneText = default;
+
+    public void SetDeadZone(float value)
+    {
+        deadZone = value;
+
+        deadZoneText.text = value.ToString();
+    }
 }

@@ -3,9 +3,9 @@
 public abstract class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    [Tooltip("Can player move in diagonal or only horizontal and vertical?")] [SerializeField] bool moveDiagonal = false;
+    [Tooltip("Can player move in diagonal or only horizontal and vertical?")] [SerializeField] protected bool moveDiagonal = false;
     [Tooltip("Release display before this time to get a swipe movement")] [SerializeField] float timeToRelease = 1;
-    [Tooltip("Inside this range, is not considered input")] [SerializeField] float deadZone = 100;
+    [Tooltip("Inside this range, is not considered input")] [SerializeField] protected float deadZone = 100;
 
     bool isSwinging;
     Vector2 startPosition;
