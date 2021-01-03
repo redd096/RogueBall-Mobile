@@ -31,6 +31,9 @@ public class AreaParry : PlayerParry
         Gizmos.color = Color.red;
 
         //draw area parry
-        Gizmos.DrawWireSphere(transform.position, areaParry);
+        foreach(Transform child in FindObjectOfType<MapManager>().transform)
+        {
+            Gizmos.DrawWireSphere(child.position, areaParry);
+        }
     }
 }
