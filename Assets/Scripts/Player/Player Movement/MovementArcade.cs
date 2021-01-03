@@ -22,7 +22,7 @@ public class MovementArcade : PlayerMovement
         transform.position = currentWaypoint.position;
     }
 
-    protected override void Swing(Vector2 direction)
+    protected override void Swipe(Vector2 direction)
     {
         //if no coroutine, start movement in direction
         if (movementCoroutine == null)
@@ -43,6 +43,9 @@ public class MovementArcade : PlayerMovement
 
         if(newWaypoint != null)
         {
+            //start swipe
+            onSwipe?.Invoke(currentWaypoint, newWaypoint);
+
             //move to new waypoint
             float delta = 0;
             while(delta < 1)
@@ -65,6 +68,9 @@ public class MovementArcade : PlayerMovement
                 transform.position = Vector2.Lerp(newWaypoint.position, currentWaypoint.position, delta);
                 yield return null;
             }
+
+            //end swipe
+            onEndSwipe?.Invoke();
         }
 
         movementCoroutine = null;

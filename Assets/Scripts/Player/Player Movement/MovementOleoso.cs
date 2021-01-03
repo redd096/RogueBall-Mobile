@@ -14,7 +14,7 @@ public class MovementOleoso : PlayerMovement
         rb = GetComponent<Rigidbody2D>();
     }
 
-    protected override void Swing(Vector2 direction)
+    protected override void Swipe(Vector2 direction)
     {
         TempFunction();
 

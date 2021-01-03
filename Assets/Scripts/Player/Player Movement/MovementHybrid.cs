@@ -20,7 +20,7 @@ public class MovementHybrid : PlayerMovement
         transform.position = currentWaypoint.position;
     }
 
-    protected override void Swing(Vector2 direction)
+    protected override void Swipe(Vector2 direction)
     {
         //if no coroutine, start movement in direction
         if (movementCoroutine == null)
@@ -41,6 +41,9 @@ public class MovementHybrid : PlayerMovement
 
         if (newWaypoint != null)
         {
+            //start swipe
+            onSwipe?.Invoke(currentWaypoint, newWaypoint);
+
             //move to new waypoint
             float delta = 0;
             while (delta < 1)
@@ -55,8 +58,10 @@ public class MovementHybrid : PlayerMovement
             //save new waypoint
             currentWaypoint = newWaypoint;
             currentKey = newKey;
-        }
 
+            //end swipe
+            onEndSwipe?.Invoke();
+        }
         movementCoroutine = null;
     }
 

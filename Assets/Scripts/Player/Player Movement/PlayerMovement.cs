@@ -7,27 +7,30 @@ public abstract class PlayerMovement : MonoBehaviour
     [Tooltip("Release display before this time to get a swipe movement")] [SerializeField] float timeToRelease = 1;
     [Tooltip("Inside this range, is not considered input")] [SerializeField] float deadZone = 100;
 
-    bool isSwinging;
+    bool isSwiping;
     Vector2 startPosition;
     float timeToSwing;
+
+    public System.Action<Transform, Transform> onSwipe;
+    public System.Action onEndSwipe;
 
     void Update()
     {
         if (CheckInput() == false)
         {
-            //if swinging but no input, stop swing
-            if (isSwinging)
-                isSwinging = false;
+            //if swiping but no input, stop
+            if (isSwiping)
+                isSwiping = false;
 
             return;
         }
 
-        if (isSwinging == false)
+        if (isSwiping == false)
         {
-            //start swing
+            //start swipe
             if (InputDown())
             {
-                isSwinging = true;
+                isSwiping = true;
 
                 //save position and time
                 startPosition = InputPosition();
@@ -36,21 +39,21 @@ public abstract class PlayerMovement : MonoBehaviour
         }
         else
         {
-            //stop swing
+            //stop swipe
             if (InputUp())
             {
-                isSwinging = false;
+                isSwiping = false;
 
                 //if in time, check swipe (delta from start position to new position)
                 if (timeToSwing >= Time.time)
                 {
-                    CheckSwing(InputPosition() - startPosition);
+                    CheckSwipe(InputPosition() - startPosition);
                 }
             }
         }
     }
 
-    void CheckSwing(Vector2 delta)
+    void CheckSwipe(Vector2 delta)
     {
         float absX = Mathf.Abs(delta.x);
         float absY = Mathf.Abs(delta.y);
@@ -89,11 +92,11 @@ public abstract class PlayerMovement : MonoBehaviour
         }
 
 
-        //swing (direction using 1 and -1)
-        Swing(direction);
+        //swipe (direction using 1 and -1)
+        Swipe(direction);
     }
 
-    protected abstract void Swing(Vector2 direction);
+    protected abstract void Swipe(Vector2 direction);
 
     #region inputs
 
