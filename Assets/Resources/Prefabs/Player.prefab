@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7166535232373902449}
   - component: {fileID: 8883501440970018610}
   - component: {fileID: 744867054120403596}
+  - component: {fileID: 326030138932253423}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -70,6 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f976618b8b09bb740997e1e570bb822c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 100
 --- !u!114 &7775771763146684635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,6 +134,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerParry: 0.05
+--- !u!114 &326030138932253423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2790818334622962260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9628277d81450a4dad93cdaff3596be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeToRelease: 1
+  deadZone: 100
+  force: 3
 --- !u!1 &5208944050749502059
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,7 +272,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

@@ -62,9 +62,44 @@ public class Player : MonoBehaviour
         }
     }
 
+    PlayerThrowBall currentThrowBall;
+    public PlayerThrowBall CurrentThrowBall
+    {
+        get
+        {
+            //if enabled, return it
+            if (currentThrowBall && currentThrowBall.enabled)
+            {
+                return currentThrowBall;
+            }
+            //else find first enabled
+            else
+            {
+                foreach (PlayerThrowBall throwBall in GetComponents<PlayerThrowBall>())
+                {
+                    if (throwBall.enabled)
+                    {
+                        currentThrowBall = throwBall;
+                        return throwBall;
+                    }
+                }
+            }
+
+            return null;
+        }
+    }
+
+    Ball currentBall;
+
     bool isDead;
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void Start()
+    {
+        //start without throw ball
+        CurrentThrowBall.enabled = false;
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
     {
         //if hit ball
         Ball ball = collision.gameObject.GetComponentInParent<Ball>();
@@ -77,13 +112,15 @@ public class Player : MonoBehaviour
             }
 
             //if no current ball, pick ball
+            if (currentBall == null)
+                PickBall(ball);
         }
     }
 
     void GetDamage(float damage)
     {
         //try parry
-        if(currentParry && currentParry.TryParry())
+        if(CurrentParry && CurrentParry.TryParry())
         {
             return;
         }
@@ -110,9 +147,28 @@ public class Player : MonoBehaviour
         Debug.Log("dead");
     }
 
-    void PickBall()
+    void PickBall(Ball ball)
     {
-        //can't move, but throw ball
+        //get ball and deactive it
+        currentBall = ball;
+        ball.gameObject.SetActive(false);
 
+        //can't move, but throw ball (use privates vars)
+        currentMovement.enabled = false;
+        currentThrowBall.enabled = true;
+    }
+
+    public void ThrowBall(float force, Vector2 direction)
+    {
+        //set ball position and activate
+        currentBall.transform.position = transform.position;
+        currentBall.gameObject.SetActive(true);
+
+        //throw ball
+        currentBall.Throw(force, direction);
+
+        //can't throw ball, but move (use private vars)
+        currentThrowBall.enabled = false;
+        currentMovement.enabled = true;
     }
 }
