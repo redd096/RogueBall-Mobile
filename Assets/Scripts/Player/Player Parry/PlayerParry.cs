@@ -20,8 +20,11 @@ public abstract class PlayerParry : MonoBehaviour
     void OnDisable()
     {
         //remove events
-        player.CurrentMovement.onSwipe -= OnSwipe;
-        player.CurrentMovement.onEndSwipe -= OnEndSwipe;
+        if (player)
+        {
+            player.CurrentMovement.onSwipe -= OnSwipe;
+            player.CurrentMovement.onEndSwipe -= OnEndSwipe;
+        }
     }
 
     protected virtual void OnSwipe(Transform startWaypoint, Transform endWaypoint)
