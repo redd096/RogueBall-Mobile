@@ -11,7 +11,7 @@ public abstract class PlayerMovement : MonoBehaviour
     Vector2 startPosition;
     float timeToSwipe;
 
-    public System.Action<Transform, Transform> onSwipe;
+    public System.Action<Waypoint, Waypoint> onSwipe;
     public System.Action onEndSwipe;
 
     void Update()

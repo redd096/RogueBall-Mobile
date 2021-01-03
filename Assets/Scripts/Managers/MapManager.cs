@@ -10,9 +10,9 @@ public class MapManager : MonoBehaviour
     [SerializeField] bool refresh = false;
 
     [Header("Map")]
-    [SerializeField] Transform[] waypoints = default;
+    [SerializeField] Waypoint[] waypoints = default;
 
-    Dictionary<Vector2Int, Transform> map = new Dictionary<Vector2Int, Transform>();
+    Dictionary<Vector2Int, Waypoint> map = new Dictionary<Vector2Int, Waypoint>();
 
     void Awake()
     {
@@ -33,7 +33,7 @@ public class MapManager : MonoBehaviour
     void RefreshWaypoints()
     {
         //order on y then x
-        Transform[] waypointsByOrder = waypoints.OrderBy(waypoint => Mathf.RoundToInt(waypoint.position.y)).ThenBy(waypoint => Mathf.RoundToInt(waypoint.position.x)).ToArray();
+        Waypoint[] waypointsByOrder = waypoints.OrderBy(waypoint => Mathf.RoundToInt(waypoint.transform.position.y)).ThenBy(waypoint => Mathf.RoundToInt(waypoint.transform.position.x)).ToArray();
 
         //reset map
         map.Clear();
@@ -47,7 +47,7 @@ public class MapManager : MonoBehaviour
         int y = 0;
         for (int i = 0; i < waypointsByOrder.Length; i++)
         {
-            Transform currentWaypoint = waypointsByOrder[i];
+            Waypoint currentWaypoint = waypointsByOrder[i];
         
             //if go to next row, reset x and increase y
             if (Mathf.RoundToInt(currentWaypoint.transform.position.y) > currentY)
@@ -65,12 +65,12 @@ public class MapManager : MonoBehaviour
 
     #region public API
 
-    public Transform GetNearestWaypoint(Vector2 position, out Vector2Int waypointKey)
+    public Waypoint GetNearestWaypoint(Vector2 position, out Vector2Int waypointKey)
     {
         return map.FindNearest(position, out waypointKey);
     }
 
-    public Transform GetWaypointInDirection(Vector2Int currentKey, Vector2Int direction, out Vector2Int waypointKey)
+    public Waypoint GetWaypointInDirection(Vector2Int currentKey, Vector2Int direction, out Vector2Int waypointKey)
     {
         //get key
         int x = currentKey.x + direction.x;

@@ -8,7 +8,7 @@ public class MovementHybrid : PlayerMovement
     [Header("Hybrid")]
     [Tooltip("Duration movement from one waypoint to another")] [SerializeField] float timeMovement = 0.3f;
 
-    Transform currentWaypoint;
+    Waypoint currentWaypoint;
     Vector2Int currentKey;
 
     Coroutine movementCoroutine;
@@ -17,7 +17,7 @@ public class MovementHybrid : PlayerMovement
     {
         //get current waypoint and set to its position
         currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(transform.position, out currentKey);
-        transform.position = currentWaypoint.position;
+        transform.position = currentWaypoint.transform.position;
     }
 
     protected override void Swipe(Vector2 direction)
@@ -37,7 +37,7 @@ public class MovementHybrid : PlayerMovement
     {
         //get waypoint to move
         Vector2Int newKey;
-        Transform newWaypoint = GameManager.instance.mapManager.GetWaypointInDirection(currentKey, direction, out newKey);
+        Waypoint newWaypoint = GameManager.instance.mapManager.GetWaypointInDirection(currentKey, direction, out newKey);
 
         if (newWaypoint != null)
         {
@@ -50,7 +50,7 @@ public class MovementHybrid : PlayerMovement
             {
                 delta += Time.deltaTime / timeMovement;
 
-                transform.position = Vector2.Lerp(currentWaypoint.position, newWaypoint.position, delta);
+                transform.position = Vector2.Lerp(currentWaypoint.transform.position, newWaypoint.transform.position, delta);
 
                 yield return null;
             }

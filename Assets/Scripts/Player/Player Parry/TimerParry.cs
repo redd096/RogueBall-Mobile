@@ -8,7 +8,7 @@ public class TimerParry : PlayerParry
 
     float timer;
 
-    protected override void OnSwipe(Transform startWaypoint, Transform endWaypoint)
+    protected override void OnSwipe(Waypoint startWaypoint, Waypoint endWaypoint)
     {
         base.OnSwipe(startWaypoint, endWaypoint);
 
@@ -16,7 +16,7 @@ public class TimerParry : PlayerParry
         timer = Time.time + timerParry;
     }
 
-    protected override bool CheckParry(Transform currentWaypoint)
+    protected override bool CheckParry(Waypoint currentWaypoint)
     {
         //if timer is not ended, parry
         if(Time.time < timer)

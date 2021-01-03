@@ -10,7 +10,7 @@ public class MovementArcade : PlayerMovement
     [Tooltip("Time to stay in new waypoint before come back to start waypoint")] [SerializeField] float timeBeforeComeBack = 0.1f;
     [Tooltip("Duration movement to come back to start waypoint")] [SerializeField] float timeComeBack = 0.3f;
 
-    Transform currentWaypoint;
+    Waypoint currentWaypoint;
     Vector2Int currentKey;
 
     Coroutine movementCoroutine;
@@ -19,7 +19,7 @@ public class MovementArcade : PlayerMovement
     {
         //get current waypoint and set to its position
         currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(transform.position, out currentKey);
-        transform.position = currentWaypoint.position;
+        transform.position = currentWaypoint.transform.position;
     }
 
     protected override void Swipe(Vector2 direction)
@@ -39,7 +39,7 @@ public class MovementArcade : PlayerMovement
     {
         //get waypoint to move
         Vector2Int newKey;
-        Transform newWaypoint = GameManager.instance.mapManager.GetWaypointInDirection(currentKey, direction, out newKey);
+        Waypoint newWaypoint = GameManager.instance.mapManager.GetWaypointInDirection(currentKey, direction, out newKey);
 
         if(newWaypoint != null)
         {
@@ -52,7 +52,7 @@ public class MovementArcade : PlayerMovement
             {
                 delta += Time.deltaTime / timeMovement;
 
-                transform.position = Vector2.Lerp(currentWaypoint.position, newWaypoint.position, delta);
+                transform.position = Vector2.Lerp(currentWaypoint.transform.position, newWaypoint.transform.position, delta);
                 yield return null;
             }
 
@@ -65,7 +65,7 @@ public class MovementArcade : PlayerMovement
             {
                 delta += Time.deltaTime / timeComeBack;
 
-                transform.position = Vector2.Lerp(newWaypoint.position, currentWaypoint.position, delta);
+                transform.position = Vector2.Lerp(newWaypoint.transform.position, currentWaypoint.transform.position, delta);
                 yield return null;
             }
 
