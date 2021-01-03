@@ -4,6 +4,9 @@ using UnityEngine;
 [AddComponentMenu("RogueBall/Ball")]
 public class Ball : MonoBehaviour
 {
+    [Header("Important")]
+    [SerializeField] float damage = 100;
+
     [Header("Speed Decrease")]
     [Tooltip("Every fixed update, decrease speed")] [SerializeField] float speedDecreaseAtSecond = 0.1f;
     [Tooltip("Every time hit something and bounce, decrease speed")] [SerializeField] float speedDecreaseAtBounce = 0.5f;
@@ -16,9 +19,10 @@ public class Ball : MonoBehaviour
     Coroutine movementCoroutine;
 
     //damage if speed greater than 0
-    public bool Damage => speed > 0;
+    public bool CanDamage => speed > 0;
+    public float Damage => damage;
 
-    #region test
+    #region test throw by inspector
 
     [Header("Test Throw (direction Y axis)")]
     [SerializeField] bool throwBall = false;

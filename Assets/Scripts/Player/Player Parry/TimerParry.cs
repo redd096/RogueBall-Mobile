@@ -16,12 +16,15 @@ public class TimerParry : PlayerParry
         timer = Time.time + timerParry;
     }
 
-    protected override void CheckParry(Transform currentWaypoint)
+    protected override bool CheckParry(Transform currentWaypoint)
     {
         //if timer is not ended, parry
         if(Time.time < timer)
         {
             Parry();
+            return true;
         }
+
+        return false;
     }
 }

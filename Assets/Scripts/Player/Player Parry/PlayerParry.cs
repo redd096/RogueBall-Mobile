@@ -2,53 +2,26 @@
 
 public abstract class PlayerParry : MonoBehaviour
 {
-    PlayerMovement privateMovement;
-    PlayerMovement currentMovement 
-    { 
-        get 
-        {
-            //if enabled, return private movement
-            if (privateMovement && privateMovement.enabled)
-            {
-                return privateMovement;
-            }
-            //else find first enabled
-            else
-            {
-                foreach (PlayerMovement movement in GetComponents<PlayerMovement>())
-                {
-                    if (movement.enabled)
-                    {
-                        privateMovement = movement;
-                        return movement;
-                    }
-                }
-            }
-
-            return null;
-        } 
-        set 
-        {
-            //set private movement
-            privateMovement = value; 
-        } 
-    }
+    Player player;
 
     protected bool isMoving;
     protected Transform startWaypoint;
     protected Transform endWaypoint;
 
     void OnEnable()
-    {  
-        currentMovement.onSwipe += OnSwipe;
-        currentMovement.onEndSwipe += OnEndSwipe;
+    {
+        player = GetComponent<Player>();
+
+        //set events
+        player.CurrentMovement.onSwipe += OnSwipe;
+        player.CurrentMovement.onEndSwipe += OnEndSwipe;
     }
 
     void OnDisable()
     {
         //remove events
-        currentMovement.onSwipe -= OnSwipe;
-        currentMovement.onEndSwipe -= OnEndSwipe;
+        player.CurrentMovement.onSwipe -= OnSwipe;
+        player.CurrentMovement.onEndSwipe -= OnEndSwipe;
     }
 
     protected virtual void OnSwipe(Transform startWaypoint, Transform endWaypoint)
@@ -66,25 +39,22 @@ public abstract class PlayerParry : MonoBehaviour
         isMoving = false;
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    public bool TryParry()
     {
-        //if hit ball and ball is going to do damage
-        Ball ball = collision.gameObject.GetComponentInParent<Ball>();
-        if (ball && ball.Damage)
+        if (isMoving)
         {
-            if (isMoving)
-            {
-                //get current waypoint
-                Vector2Int currentKey;
-                Transform currentWaypoint = redd096.GameManager.instance.mapManager.GetNearestWaypoint(transform.position, out currentKey);
+            //get current waypoint
+            Vector2Int currentKey;
+            Transform currentWaypoint = redd096.GameManager.instance.mapManager.GetNearestWaypoint(transform.position, out currentKey);
 
-                //check parry
-                CheckParry(currentWaypoint);
-            }
+            //check parry
+            return CheckParry(currentWaypoint);
         }
+
+        return false;
     }
 
-    protected abstract void CheckParry(Transform currentWaypoint);
+    protected abstract bool CheckParry(Transform currentWaypoint);
 
     protected void Parry()
     {

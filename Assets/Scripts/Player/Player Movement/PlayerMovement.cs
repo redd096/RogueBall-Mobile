@@ -9,7 +9,7 @@ public abstract class PlayerMovement : MonoBehaviour
 
     bool isSwiping;
     Vector2 startPosition;
-    float timeToSwing;
+    float timeToSwipe;
 
     public System.Action<Transform, Transform> onSwipe;
     public System.Action onEndSwipe;
@@ -34,7 +34,7 @@ public abstract class PlayerMovement : MonoBehaviour
 
                 //save position and time
                 startPosition = InputPosition();
-                timeToSwing = Time.time + timeToRelease;
+                timeToSwipe = Time.time + timeToRelease;
             }
         }
         else
@@ -45,7 +45,7 @@ public abstract class PlayerMovement : MonoBehaviour
                 isSwiping = false;
 
                 //if in time, check swipe (delta from start position to new position)
-                if (timeToSwing >= Time.time)
+                if (timeToSwipe >= Time.time)
                 {
                     CheckSwipe(InputPosition() - startPosition);
                 }

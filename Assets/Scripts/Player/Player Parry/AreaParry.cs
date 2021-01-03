@@ -8,7 +8,7 @@ public class AreaParry : PlayerParry
     [Tooltip("Parry on reached waypoint")] [SerializeField] bool parryOnEndWaypoint = true;
     [Tooltip("Distance from center of waypoint (red circle)")] [SerializeField] float areaParry = 0.3f;
 
-    protected override void CheckParry(Transform currentWaypoint)
+    protected override bool CheckParry(Transform currentWaypoint)
     {
         //if can parry (start or end waypoint)
         if((currentWaypoint == startWaypoint && parryOnStartWaypoint)
@@ -19,8 +19,11 @@ public class AreaParry : PlayerParry
             {
                 //parry
                 Parry();
+                return true;
             }
         }
+
+        return false;
     }
 
     void OnDrawGizmos()
