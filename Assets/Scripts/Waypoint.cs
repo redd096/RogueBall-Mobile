@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Waypoint : MonoBehaviour
@@ -13,11 +12,38 @@ public class Waypoint : MonoBehaviour
     public bool IsActive => isActive;
     public float AreaParry => areaParry;
 
+    Coroutine reactiveCoroutine;
+
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
+        //do only if active
+        if (IsActive)
+        {
+            Gizmos.color = Color.red;
 
-        //draw area parry
-        Gizmos.DrawWireSphere(transform.position, areaParry);
+            //draw area parry
+            Gizmos.DrawWireSphere(transform.position, areaParry);
+        }
+    }
+
+    public void Deactive(float timeToReactive)
+    {
+        //deactive
+        isActive = false;
+
+        //start coroutine to reactive
+        if (reactiveCoroutine != null)
+            StopCoroutine(reactiveCoroutine);
+
+        reactiveCoroutine = StartCoroutine(ReactiveCoroutine(timeToReactive));
+    }
+
+    IEnumerator ReactiveCoroutine(float timeToReactive)
+    {
+        //wait
+        yield return new WaitForSeconds(timeToReactive);
+
+        //reactive
+        isActive = true;
     }
 }

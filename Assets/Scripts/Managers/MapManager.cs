@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using redd096;
 
 [AddComponentMenu("RogueBall/Managers/Map Manager")]
 public class MapManager : MonoBehaviour
