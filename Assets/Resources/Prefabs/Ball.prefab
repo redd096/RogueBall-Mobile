@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4187628709312705477}
   - component: {fileID: 4187628709312705478}
-  - component: {fileID: 4187628709312705479}
+  - component: {fileID: 3347460139930942441}
   m_Layer: 0
-  m_Name: New Sprite
+  m_Name: SpriteBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,8 +70,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: 649effae750759a43919a38e4ad3ee15, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &4187628709312705479
+--- !u!58 &3347460139930942441
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,7 +97,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.1
+  m_Radius: 0.25
 --- !u!1 &4187628709664637899
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,6 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab5d9a87da0f5e14a9135c73f2c1edab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 100
   speedDecreaseAtSecond: 0.1
   speedDecreaseAtBounce: 0.5
   throwBall: 0
