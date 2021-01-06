@@ -67,7 +67,27 @@ public class MapManager : MonoBehaviour
 
     public Waypoint GetNearestWaypoint(Vector2 position, out Vector2Int waypointKey)
     {
-        return map.FindNearest(position, out waypointKey);
+        Vector2Int nearestKey = default;
+        float distance = Mathf.Infinity;
+
+        //foreach key in the dictionary
+        foreach(Vector2Int key in map.Keys)
+        {
+            //only if there is a waypoint and is active
+            if (map[key] == null || map[key].IsActive == false)
+                continue;
+
+            //check distance to find nearest
+            float newDistance = Vector3.Distance(map[key].transform.position, position);
+            if(newDistance < distance)
+            {
+                distance = newDistance;
+                nearestKey = key;
+            }
+        }
+
+        waypointKey = nearestKey;
+        return map[nearestKey];
     }
 
     public Waypoint GetWaypointInDirection(Vector2Int currentKey, Vector2Int direction, out Vector2Int waypointKey)
@@ -78,7 +98,7 @@ public class MapManager : MonoBehaviour
         waypointKey = new Vector2Int(x, y);
 
         //if there is a waypoint in these coordinates, return it
-        if (map.ContainsKey(waypointKey))
+        if (map.ContainsKey(waypointKey) && map[waypointKey].IsActive)
             return map[waypointKey];
 
         return null;
