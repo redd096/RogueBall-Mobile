@@ -5,8 +5,15 @@ using UnityEngine;
 [AddComponentMenu("RogueBall/Player/Player")]
 public class Player : MonoBehaviour
 {
+    #region variables
+
     [Header("Important")]
     [SerializeField] float health = 100;
+
+    Ball currentBall;
+    bool isDead;
+
+    #region components
 
     PlayerMovement currentMovement;
     public PlayerMovement CurrentMovement
@@ -89,9 +96,9 @@ public class Player : MonoBehaviour
         }
     }
 
-    Ball currentBall;
+    #endregion
 
-    bool isDead;
+    #endregion
 
     void Start()
     {
