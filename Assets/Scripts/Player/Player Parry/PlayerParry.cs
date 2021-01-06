@@ -5,8 +5,8 @@ public abstract class PlayerParry : MonoBehaviour
     Player player;
 
     protected bool isMoving;
-    protected Transform startWaypoint;
-    protected Transform endWaypoint;
+    protected Waypoint startWaypoint;
+    protected Waypoint endWaypoint;
 
     void OnEnable()
     {
@@ -27,7 +27,7 @@ public abstract class PlayerParry : MonoBehaviour
         }
     }
 
-    protected virtual void OnSwipe(Transform startWaypoint, Transform endWaypoint)
+    protected virtual void OnSwipe(Waypoint startWaypoint, Waypoint endWaypoint)
     {
         //is moving and set waypoints
         isMoving = true;
@@ -48,7 +48,7 @@ public abstract class PlayerParry : MonoBehaviour
         {
             //get current waypoint
             Vector2Int currentKey;
-            Transform currentWaypoint = redd096.GameManager.instance.mapManager.GetNearestWaypoint(transform.position, out currentKey);
+            Waypoint currentWaypoint = redd096.GameManager.instance.mapManager.GetNearestWaypoint(transform.position, out currentKey);
 
             //check parry
             return CheckParry(currentWaypoint);
@@ -57,7 +57,7 @@ public abstract class PlayerParry : MonoBehaviour
         return false;
     }
 
-    protected abstract bool CheckParry(Transform currentWaypoint);
+    protected abstract bool CheckParry(Waypoint currentWaypoint);
 
     protected void Parry()
     {
