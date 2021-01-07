@@ -103,8 +103,8 @@ public abstract class PlayerMovement : MonoBehaviour
         Move(direction);
         
         //set animator
-        anim?.SetInteger("Horizontal", direction.x);
-        anim?.SetInteger("Vertical", direction.y);
+        anim?.SetFloat("Horizontal", direction.x);
+        anim?.SetFloat("Vertical", direction.y);
     }
 
     protected abstract void Move(Vector2Int direction);

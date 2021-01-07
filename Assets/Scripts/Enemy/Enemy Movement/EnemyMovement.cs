@@ -41,8 +41,8 @@ public abstract class EnemyMovement : MonoBehaviour
             Move(direction);
 
             //set animator
-            anim?.SetInteger("Horizontal", direction.x);
-            anim?.SetInteger("Vertical", direction.y);
+            anim?.SetFloat("Horizontal", direction.x);
+            anim?.SetFloat("Vertical", direction.y);
 
             ResetTimer();
         }
@@ -65,9 +65,12 @@ public abstract class EnemyMovement : MonoBehaviour
         //activate or deactivate
         arrow.gameObject.SetActive(activate);
 
+        //if activate, rotate to direction
         if(activate)
         {
-
+            //0, 45, 90, 135, 180, -135 (225), -90 (270), -45 (315)
+            if (direction.y > 0)
+                arrow.localEulerAngles = new Vector3(0, 0, 0);
         }
     }
 
