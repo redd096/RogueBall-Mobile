@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[AddComponentMenu("RogueBall/Player/Player")]
-public class Player : MonoBehaviour
+[AddComponentMenu("RogueBall/Enemy/Enemy")]
+public class Enemy : MonoBehaviour
 {
     #region variables
 
@@ -15,8 +15,8 @@ public class Player : MonoBehaviour
 
     #region components
 
-    PlayerMovement currentMovement;
-    public PlayerMovement CurrentMovement
+    EnemyMovement currentMovement;
+    public EnemyMovement CurrentMovement
     {
         get
         {
@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
             //else find first enabled
             else
             {
-                foreach (PlayerMovement movement in GetComponents<PlayerMovement>())
+                foreach (EnemyMovement movement in GetComponents<EnemyMovement>())
                 {
                     if (movement.enabled)
                     {
@@ -42,8 +42,8 @@ public class Player : MonoBehaviour
         }
     }
 
-    PlayerParry currentParry;
-    public PlayerParry CurrentParry
+    EnemyParry currentParry;
+    public EnemyParry CurrentParry
     {
         get
         {
@@ -55,7 +55,7 @@ public class Player : MonoBehaviour
             //else find first enabled
             else
             {
-                foreach (PlayerParry parry in GetComponents<PlayerParry>())
+                foreach (EnemyParry parry in GetComponents<EnemyParry>())
                 {
                     if (parry.enabled)
                     {
@@ -69,8 +69,8 @@ public class Player : MonoBehaviour
         }
     }
 
-    PlayerThrowBall currentThrowBall;
-    public PlayerThrowBall CurrentThrowBall
+    EnemyThrowBall currentThrowBall;
+    public EnemyThrowBall CurrentThrowBall
     {
         get
         {
@@ -82,7 +82,7 @@ public class Player : MonoBehaviour
             //else find first enabled
             else
             {
-                foreach (PlayerThrowBall throwBall in GetComponents<PlayerThrowBall>())
+                foreach (EnemyThrowBall throwBall in GetComponents<EnemyThrowBall>())
                 {
                     if (throwBall.enabled)
                     {
@@ -110,9 +110,10 @@ public class Player : MonoBehaviour
     {
         //if hit ball
         Ball ball = collision.gameObject.GetComponentInParent<Ball>();
+        Debug.Log(ball);
         if (ball && ball.CanHit(transform))
         {
-            if(ball.CanDamage)
+            if (ball.CanDamage)
             {
                 //get damage
                 GetDamage(ball.Damage);
@@ -127,14 +128,14 @@ public class Player : MonoBehaviour
     void GetDamage(float damage)
     {
         //try parry
-        if(CurrentParry && CurrentParry.TryParry())
+        if (CurrentParry && CurrentParry.TryParry())
         {
             return;
         }
 
         //else get damage and check death
         health -= damage;
-        if(health <= 0)
+        if (health <= 0)
         {
             Die();
         }
@@ -147,11 +148,8 @@ public class Player : MonoBehaviour
 
         isDead = true;
 
-        //disable movement and parry
-        //currentMovement.enabled = false;
-        //currentParry.enabled = false;
-
-        Debug.Log("dead");
+        //destroy enemy
+        Destroy(gameObject);
     }
 
     void PickBall(Ball ball)

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public abstract class PlayerParry : MonoBehaviour
+public abstract class EnemyParry : MonoBehaviour
 {
-    Player player;
+    Enemy enemy;
 
     protected bool isMoving;
     protected Waypoint startWaypoint;
@@ -10,20 +10,20 @@ public abstract class PlayerParry : MonoBehaviour
 
     void OnEnable()
     {
-        player = GetComponent<Player>();
+        enemy = GetComponent<Enemy>();
 
         //set events
-        player.CurrentMovement.onMove += OnMove;
-        player.CurrentMovement.onEndMove += OnEndMove;
+        enemy.CurrentMovement.onMove += OnMove;
+        enemy.CurrentMovement.onEndMove += OnEndMove;
     }
 
     void OnDisable()
     {
         //remove events
-        if (player)
+        if (enemy)
         {
-            player.CurrentMovement.onMove -= OnMove;
-            player.CurrentMovement.onEndMove -= OnEndMove;
+            enemy.CurrentMovement.onMove -= OnMove;
+            enemy.CurrentMovement.onEndMove -= OnEndMove;
         }
     }
 
@@ -48,7 +48,7 @@ public abstract class PlayerParry : MonoBehaviour
         {
             //get current waypoint
             Vector2Int currentKey;
-            Waypoint currentWaypoint = redd096.GameManager.instance.mapManager.GetNearestWaypoint(transform.position, true, out currentKey);
+            Waypoint currentWaypoint = redd096.GameManager.instance.mapManager.GetNearestWaypoint(transform.position, false, out currentKey);
 
             //check parry
             return CheckParry(currentWaypoint);

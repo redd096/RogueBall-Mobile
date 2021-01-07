@@ -8,11 +8,18 @@ public abstract class PlayerMovement : MonoBehaviour
     [Tooltip("Inside this range, is not considered input")] [SerializeField] float deadZone = 100;
 
     bool isSwiping;
-    Vector2 startPosition;
+    Vector2 startSwipePosition;
     float timeToSwipe;
 
-    public System.Action<Waypoint, Waypoint> onSwipe;
-    public System.Action onEndSwipe;
+    public System.Action<Waypoint, Waypoint> onMove;
+    public System.Action onEndMove;
+
+    Animator anim;
+
+    void Awake()
+    {
+        anim = GetComponentInChildren<Animator>();
+    }
 
     void Update()
     {
@@ -33,7 +40,7 @@ public abstract class PlayerMovement : MonoBehaviour
                 isSwiping = true;
 
                 //save position and time
-                startPosition = InputPosition();
+                startSwipePosition = InputPosition();
                 timeToSwipe = Time.time + timeToRelease;
             }
         }
@@ -47,7 +54,7 @@ public abstract class PlayerMovement : MonoBehaviour
                 //if in time, check swipe (delta from start position to new position)
                 if (timeToSwipe >= Time.time)
                 {
-                    CheckSwipe(InputPosition() - startPosition);
+                    CheckSwipe(InputPosition() - startSwipePosition);
                 }
             }
         }
@@ -69,10 +76,10 @@ public abstract class PlayerMovement : MonoBehaviour
             return;
 
         //get direction horizontal or vertical (based on greater)
-        Vector2 direction = Vector2.zero;
+        Vector2Int direction = Vector2Int.zero;
         if(absX > absY)
         {
-            direction = delta.x > Mathf.Epsilon ? Vector2.right : Vector2.left;
+            direction = delta.x > Mathf.Epsilon ? Vector2Int.right : Vector2Int.left;
 
             //if move diagonal, add vertical if necessary
             if(moveDiagonal && absY > Mathf.Epsilon)
@@ -82,7 +89,7 @@ public abstract class PlayerMovement : MonoBehaviour
         }
         else
         {
-            direction = delta.y > Mathf.Epsilon ? Vector2.up : Vector2.down;
+            direction = delta.y > Mathf.Epsilon ? Vector2Int.up : Vector2Int.down;
 
             //if move diagonal, add horizontal if necessary
             if (moveDiagonal && absX > Mathf.Epsilon)
@@ -93,10 +100,14 @@ public abstract class PlayerMovement : MonoBehaviour
 
 
         //swipe (direction using 1 and -1)
-        Swipe(direction);
+        Move(direction);
+        
+        //set animator
+        anim?.SetInteger("Horizontal", direction.x);
+        anim?.SetInteger("Vertical", direction.y);
     }
 
-    protected abstract void Swipe(Vector2 direction);
+    protected abstract void Move(Vector2Int direction);
 
     #region inputs
 

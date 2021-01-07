@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-[AddComponentMenu("RogueBall/Player/Movement/Movement Oleoso")]
-public class MovementOleoso : PlayerMovement
+[AddComponentMenu("RogueBall/Player/Movement/Oleoso Movement")]
+public class OleosoMovement : PlayerMovement
 {
     [Header("Oleoso")]
     [Tooltip("When swing, reset speed or add push to current speed?")] [SerializeField] bool resetSpeed = false;
@@ -14,15 +14,15 @@ public class MovementOleoso : PlayerMovement
         rb = GetComponent<Rigidbody2D>();
     }
 
-    protected override void Swipe(Vector2 direction)
+    protected override void Move(Vector2Int direction)
     {
         TempFunction();
 
         //move - reset speed or add force
         if (resetSpeed)
-            rb.velocity = direction.normalized * force;
+            rb.velocity = new Vector2(direction.x, direction.y).normalized * force;
         else
-            rb.AddForce(direction.normalized * force, ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(direction.x, direction.y).normalized * force, ForceMode2D.Impulse);
     }
 
     void TempFunction()

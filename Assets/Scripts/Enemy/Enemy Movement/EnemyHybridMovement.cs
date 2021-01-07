@@ -2,8 +2,8 @@
 using UnityEngine;
 using redd096;
 
-[AddComponentMenu("RogueBall/Player/Movement/Movement Hybrid")]
-public class MovementHybrid : PlayerMovement
+[AddComponentMenu("RogueBall/Enemy/Movement/Enemy Hybrid Movement")]
+public class EnemyHybridMovement : EnemyMovement
 {
     [Header("Hybrid")]
     [Tooltip("Duration movement from one waypoint to another")] [SerializeField] float timeMovement = 0.3f;
@@ -16,20 +16,20 @@ public class MovementHybrid : PlayerMovement
     void Start()
     {
         //get current waypoint and set to its position
-        currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(transform.position, out currentKey);
+        currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(transform.position, false, out currentKey);
         transform.position = currentWaypoint.transform.position;
     }
 
-    protected override void Swipe(Vector2 direction)
+    protected override void Move(Vector2Int direction)
     {
         //if no coroutine, start movement in direction
         if (movementCoroutine == null)
         {
             TempFunction();
 
-            Vector2Int directionInt = new Vector2Int(Mathf.RoundToInt(direction.x), Mathf.RoundToInt(direction.y));
+            //Vector2Int directionInt = new Vector2Int(Mathf.RoundToInt(direction.x), Mathf.RoundToInt(direction.y));
 
-            movementCoroutine = StartCoroutine(MovementCoroutine(directionInt));
+            movementCoroutine = StartCoroutine(MovementCoroutine(direction));
         }
     }
 
@@ -37,12 +37,12 @@ public class MovementHybrid : PlayerMovement
     {
         //get waypoint to move
         Vector2Int newKey;
-        Waypoint newWaypoint = GameManager.instance.mapManager.GetWaypointInDirection(currentKey, direction, out newKey);
+        Waypoint newWaypoint = GameManager.instance.mapManager.GetWaypointInDirection(currentKey, direction, false, out newKey);
 
         if (newWaypoint != null)
         {
             //start swipe
-            onSwipe?.Invoke(currentWaypoint, newWaypoint);
+            onMove?.Invoke(currentWaypoint, newWaypoint);
 
             //move to new waypoint
             float delta = 0;
@@ -60,7 +60,7 @@ public class MovementHybrid : PlayerMovement
             currentKey = newKey;
 
             //end swipe
-            onEndSwipe?.Invoke();
+            onEndMove?.Invoke();
         }
         movementCoroutine = null;
     }
@@ -68,7 +68,7 @@ public class MovementHybrid : PlayerMovement
     void TempFunction()
     {
         //be sure to have current waypoint
-        if(currentWaypoint == null)
-            currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(transform.position, out currentKey);
+        if (currentWaypoint == null)
+            currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(transform.position, false, out currentKey);
     }
 }

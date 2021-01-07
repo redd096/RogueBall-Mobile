@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-[AddComponentMenu("RogueBall/Player/Parry/Timer Parry")]
-public class TimerParry : PlayerParry
+[AddComponentMenu("RogueBall/Enemy/Parry/Enemy Timer Parry")]
+public class EnemyTimerParry : EnemyParry
 {
     [Header("Important")]
     [Tooltip("Timer start on swipe, if hitted in this time can parry")] [SerializeField] float timerParry = 0.05f;

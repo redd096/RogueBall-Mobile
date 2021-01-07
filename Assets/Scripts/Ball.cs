@@ -22,6 +22,9 @@ public class Ball : MonoBehaviour
     public bool CanDamage => speed > 0;
     public float Damage => damage;
 
+    Transform owner;
+    bool ownerCanBeHitted;
+
     #region test throw by inspector
 
     [Header("Test Throw (direction Y axis)")]
@@ -61,7 +64,7 @@ public class Ball : MonoBehaviour
 
         //remove text and throw
         timerText.gameObject.SetActive(false);
-        Throw(speedThrow, transform.up);
+        Throw(speedThrow, transform.up, null);
     }
 
     #endregion
@@ -71,11 +74,30 @@ public class Ball : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Throw(float speed, Vector2 direction)
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        //decrease speed at bounce
+        speed -= speedDecreaseAtBounce;
+
+        //bounce
+        direction = Vector2.Reflect(direction, collision.GetContact(0).normal);
+
+        ownerCanBeHitted = true;
+    }
+
+    public bool CanHit(Transform hit)
+    {
+        return hit != owner || ownerCanBeHitted;
+    }
+
+    public void Throw(float speed, Vector2 direction, Transform owner)
     {
         //throw values
         this.speed = speed;
         this.direction = direction;
+        this.owner = owner;
+
+        ownerCanBeHitted = false;
 
         //start movement coroutine
         if (movementCoroutine != null)
@@ -99,14 +121,5 @@ public class Ball : MonoBehaviour
             rb.velocity = direction * speed;
             speed -= speedDecreaseAtSecond * Time.fixedDeltaTime;
         }
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        //decrease speed at bounce
-        speed -= speedDecreaseAtBounce;
-
-        //bounce
-        direction = Vector2.Reflect(direction, collision.GetContact(0).normal);
     }
 }

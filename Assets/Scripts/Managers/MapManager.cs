@@ -11,7 +11,7 @@ public class MapManager : MonoBehaviour
     [Header("Map")]
     [SerializeField] Waypoint[] waypoints = default;
 
-    Dictionary<Vector2Int, Waypoint> map = new Dictionary<Vector2Int, Waypoint>();
+    Dictionary<Vector2Int, Waypoint> mapPlayer = new Dictionary<Vector2Int, Waypoint>();
 
     void Awake()
     {
@@ -35,7 +35,7 @@ public class MapManager : MonoBehaviour
         Waypoint[] waypointsByOrder = waypoints.OrderBy(waypoint => Mathf.RoundToInt(waypoint.transform.position.y)).ThenBy(waypoint => Mathf.RoundToInt(waypoint.transform.position.x)).ToArray();
 
         //reset map
-        map.Clear();
+        mapPlayer.Clear();
 
         //be sure there is something before start
         if (waypointsByOrder == null || waypoints.Length <= 0)
@@ -57,27 +57,28 @@ public class MapManager : MonoBehaviour
             }
 
             //add to map and increase x
-            map.Add(new Vector2Int(x, y), currentWaypoint);        
+            mapPlayer.Add(new Vector2Int(x, y), currentWaypoint);        
             x++;
         }
     }
 
     #region public API
 
-    public Waypoint GetNearestWaypoint(Vector2 position, out Vector2Int waypointKey)
+    public Waypoint GetNearestWaypoint(Vector2 position, bool isPlayer, out Vector2Int waypointKey)
     {
         Vector2Int nearestKey = default;
         float distance = Mathf.Infinity;
 
         //foreach key in the dictionary
-        foreach(Vector2Int key in map.Keys)
+        foreach(Vector2Int key in mapPlayer.Keys)
         {
             //only if there is a waypoint and is active
-            if (map[key] == null || map[key].IsActive == false)
+            if (mapPlayer[key] == null || mapPlayer[key].IsActive == false
+                || mapPlayer[key].IsPlayerWaypoint != isPlayer)                     //if is playerWaypoint but for enemy, or is enemyWaypoint but for player
                 continue;
 
             //check distance to find nearest
-            float newDistance = Vector3.Distance(map[key].transform.position, position);
+            float newDistance = Vector3.Distance(mapPlayer[key].transform.position, position);
             if(newDistance < distance)
             {
                 distance = newDistance;
@@ -86,10 +87,10 @@ public class MapManager : MonoBehaviour
         }
 
         waypointKey = nearestKey;
-        return map[nearestKey];
+        return mapPlayer[nearestKey];
     }
 
-    public Waypoint GetWaypointInDirection(Vector2Int currentKey, Vector2Int direction, out Vector2Int waypointKey)
+    public Waypoint GetWaypointInDirection(Vector2Int currentKey, Vector2Int direction, bool isPlayer, out Vector2Int waypointKey)
     {
         //get key
         int x = currentKey.x + direction.x;
@@ -97,8 +98,9 @@ public class MapManager : MonoBehaviour
         waypointKey = new Vector2Int(x, y);
 
         //if there is a waypoint in these coordinates, return it
-        if (map.ContainsKey(waypointKey) && map[waypointKey].IsActive)
-            return map[waypointKey];
+        if (mapPlayer.ContainsKey(waypointKey) && mapPlayer[waypointKey].IsActive
+            && mapPlayer[waypointKey].IsPlayerWaypoint == isPlayer)                 //is playerWaypoint for a player, or enemyWaypoint for enemy
+            return mapPlayer[waypointKey];
 
         return null;
     }

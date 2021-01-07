@@ -1,15 +1,18 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+[AddComponentMenu("RogueBall/Waypoint")]
 public class Waypoint : MonoBehaviour
 {
     [Header("Important")]
     [Tooltip("Is this waypoint active at start?")] [SerializeField] bool isActive = true;
+    [Tooltip("Can move player or enemy on this waypoint?")] [SerializeField] bool isPlayerWaypoint = true;
 
     [Header("Area Parry")]
     [Tooltip("Area used for AreaParry")] [SerializeField] float areaParry = 0.3f;
 
     public bool IsActive => isActive;
+    public bool IsPlayerWaypoint => isPlayerWaypoint;
     public float AreaParry => areaParry;
 
     Coroutine reactiveCoroutine;
