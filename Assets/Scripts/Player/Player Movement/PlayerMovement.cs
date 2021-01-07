@@ -14,7 +14,7 @@ public abstract class PlayerMovement : MonoBehaviour
     public System.Action<Waypoint, Waypoint> onMove;
     public System.Action onEndMove;
 
-    Animator anim;
+    protected Animator anim;
 
     void Awake()
     {
@@ -97,7 +97,6 @@ public abstract class PlayerMovement : MonoBehaviour
                 direction.x = delta.x > Mathf.Epsilon ? 1 : -1;
             }
         }
-
 
         //swipe (direction using 1 and -1)
         Move(direction);

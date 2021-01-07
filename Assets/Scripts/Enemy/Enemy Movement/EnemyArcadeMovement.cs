@@ -43,6 +43,7 @@ public class EnemyArcadeMovement : EnemyMovement
         {
             //start swipe
             onMove?.Invoke(currentWaypoint, newWaypoint);
+            anim?.SetBool("Move", true);
 
             //move to new waypoint
             float delta = 0;
@@ -69,6 +70,7 @@ public class EnemyArcadeMovement : EnemyMovement
 
             //end swipe
             onEndMove?.Invoke();
+            anim?.SetBool("Move", false);
         }
 
         movementCoroutine = null;

@@ -12,7 +12,7 @@ public abstract class EnemyMovement : MonoBehaviour
     public System.Action<Waypoint, Waypoint> onMove;
     public System.Action onEndMove;
 
-    Animator anim;
+    protected Animator anim;
     Vector2Int direction;
     float timer;
 
@@ -69,8 +69,22 @@ public abstract class EnemyMovement : MonoBehaviour
         if(activate)
         {
             //0, 45, 90, 135, 180, -135 (225), -90 (270), -45 (315)
-            if (direction.y > 0)
+            if (direction.y > 0 && direction.x == 0)
                 arrow.localEulerAngles = new Vector3(0, 0, 0);
+            else if (direction.y > 0 && direction.x < 0)
+                arrow.localEulerAngles = new Vector3(0, 0, 45);
+            else if (direction.y == 0 && direction.x < 0)
+                arrow.localEulerAngles = new Vector3(0, 0, 90);
+            else if (direction.y < 0 && direction.x < 0)
+                arrow.localEulerAngles = new Vector3(0, 0, 135);
+            else if (direction.y < 0 && direction.x == 0)
+                arrow.localEulerAngles = new Vector3(0, 0, 180);
+            else if (direction.y < 0 && direction.x > 0)
+                arrow.localEulerAngles = new Vector3(0, 0, 255);
+            else if (direction.y == 0 && direction.x > 0)
+                arrow.localEulerAngles = new Vector3(0, 0, 270);
+            else
+                arrow.localEulerAngles = new Vector3(0, 0, 315);
         }
     }
 

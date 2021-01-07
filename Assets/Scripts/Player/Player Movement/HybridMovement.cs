@@ -43,6 +43,7 @@ public class HybridMovement : PlayerMovement
         {
             //start swipe
             onMove?.Invoke(currentWaypoint, newWaypoint);
+            anim?.SetBool("Move", true);
 
             //move to new waypoint
             float delta = 0;
@@ -61,6 +62,7 @@ public class HybridMovement : PlayerMovement
 
             //end swipe
             onEndMove?.Invoke();
+            anim?.SetBool("Move", false);
         }
         movementCoroutine = null;
     }
