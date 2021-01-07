@@ -110,7 +110,6 @@ public class Enemy : MonoBehaviour
     {
         //if hit ball
         Ball ball = collision.gameObject.GetComponentInParent<Ball>();
-        Debug.Log(ball);
         if (ball && ball.CanHit(transform))
         {
             if (ball.CanDamage)
