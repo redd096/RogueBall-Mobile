@@ -1,125 +1,129 @@
-﻿using System.Collections;
-using UnityEngine;
-
-[AddComponentMenu("RogueBall/Ball")]
-public class Ball : MonoBehaviour
+﻿namespace RogueBall
 {
-    [Header("Important")]
-    [SerializeField] float damage = 100;
+    using System.Collections;
+    using UnityEngine;
 
-    [Header("Speed Decrease")]
-    [Tooltip("Every fixed update, decrease speed")] [SerializeField] float speedDecreaseAtSecond = 0.1f;
-    [Tooltip("Every time hit something and bounce, decrease speed")] [SerializeField] float speedDecreaseAtBounce = 0.5f;
-
-    Rigidbody2D rb;
-
-    //movement
-    float speed;
-    Vector2 direction;
-    Coroutine movementCoroutine;
-
-    //damage if speed greater than 0
-    public bool CanDamage => speed > 0;
-    public float Damage => damage;
-
-    Transform owner;
-    bool ownerCanBeHitted;
-
-    #region test throw by inspector
-
-    [Header("Test Throw (direction Y axis)")]
-    [SerializeField] bool throwBall = false;
-    [SerializeField] float speedThrow = 3;
-    [SerializeField] float timer = 1;
-    [SerializeField] UnityEngine.UI.Text timerText = default;
-    Coroutine testCoroutine;
-
-    private void OnValidate()
+    [AddComponentMenu("RogueBall/Ball")]
+    public class Ball : MonoBehaviour
     {
-        //test throw ball
-        if(throwBall)
+        [Header("Speed Decrease")]
+        [Tooltip("Every fixed update, decrease speed")] [SerializeField] float speedDecreaseAtSecond = 0.1f;
+        [Tooltip("Every time hit something and bounce, decrease speed")] [SerializeField] float speedDecreaseAtBounce = 0.5f;
+
+        Rigidbody2D rb;
+
+        //movement
+        float speed;
+        Vector2 direction;
+        Coroutine movementCoroutine;
+
+        //damage if speed greater than 0
+        float damage;
+        public bool CanDamage => speed > 0;
+        public float Damage => damage;
+
+        //owner
+        Transform owner;
+        bool ownerCanBeHitted;
+
+        #region test throw by inspector
+
+        [Header("Test Throw (direction Y axis)")]
+        [SerializeField] bool throwBall = false;
+        [SerializeField] float speedThrow = 3;
+        [SerializeField] float damageThrow = 100;
+        [SerializeField] float timer = 1;
+        [SerializeField] UnityEngine.UI.Text timerText = default;
+        Coroutine testCoroutine;
+
+        private void OnValidate()
         {
-            throwBall = false;
+            //test throw ball
+            if (throwBall)
+            {
+                throwBall = false;
 
-            if (testCoroutine != null)
-                StopCoroutine(testCoroutine);
+                if (testCoroutine != null)
+                    StopCoroutine(testCoroutine);
 
-            testCoroutine = StartCoroutine(TestCoroutine());
+                testCoroutine = StartCoroutine(TestCoroutine());
+            }
         }
-    }
 
-    IEnumerator TestCoroutine()
-    {
-        //init timer
-        float timeTest = Time.time + timer;
-        timerText.text = Mathf.Ceil(timeTest - Time.time).ToString("F0");
-        timerText.gameObject.SetActive(true);
-
-        while (timeTest > Time.time)
+        IEnumerator TestCoroutine()
         {
-            //set text
+            //init timer
+            float timeTest = Time.time + timer;
             timerText.text = Mathf.Ceil(timeTest - Time.time).ToString("F0");
-            yield return null;
+            timerText.gameObject.SetActive(true);
+
+            while (timeTest > Time.time)
+            {
+                //set text
+                timerText.text = Mathf.Ceil(timeTest - Time.time).ToString("F0");
+                yield return null;
+            }
+
+            //remove text and throw
+            timerText.gameObject.SetActive(false);
+            Throw(speedThrow, transform.up, damageThrow, null);
         }
 
-        //remove text and throw
-        timerText.gameObject.SetActive(false);
-        Throw(speedThrow, transform.up, null);
-    }
+        #endregion
 
-    #endregion
-
-    void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        //decrease speed at bounce
-        speed -= speedDecreaseAtBounce;
-
-        //bounce
-        direction = Vector2.Reflect(direction, collision.GetContact(0).normal);
-
-        ownerCanBeHitted = true;
-    }
-
-    public bool CanHit(Transform hit)
-    {
-        return hit != owner || ownerCanBeHitted;
-    }
-
-    public void Throw(float speed, Vector2 direction, Transform owner)
-    {
-        //throw values
-        this.speed = speed;
-        this.direction = direction;
-        this.owner = owner;
-
-        ownerCanBeHitted = false;
-
-        //start movement coroutine
-        if (movementCoroutine != null)
-            StopCoroutine(movementCoroutine);
-
-        movementCoroutine = StartCoroutine(MovementCoroutine());
-    }
-
-    IEnumerator MovementCoroutine()
-    {
-        while (true)
+        void Awake()
         {
-            //do in fixed update
-            yield return new WaitForFixedUpdate();
+            rb = GetComponent<Rigidbody2D>();
+        }
 
-            //if stopped movement, stop coroutine
-            if (speed <= 0)
-                yield break;
+        void OnCollisionEnter2D(Collision2D collision)
+        {
+            //decrease speed at bounce
+            speed -= speedDecreaseAtBounce;
 
-            //move rigidbody then decrease speed
-            rb.velocity = direction * speed;
-            speed -= speedDecreaseAtSecond * Time.fixedDeltaTime;
+            //bounce
+            direction = Vector2.Reflect(direction, collision.GetContact(0).normal);
+
+            ownerCanBeHitted = true;
+        }
+
+        public bool CanHit(Transform hit)
+        {
+            return hit != owner || ownerCanBeHitted;
+        }
+
+        public void Throw(float speed, Vector2 direction, float damage, Transform owner)
+        {
+            //throw values
+            this.speed = speed;
+            this.direction = direction;
+            this.damage = damage;
+            this.owner = owner;
+
+            ownerCanBeHitted = false;
+
+            //start movement coroutine
+            if (movementCoroutine != null)
+                StopCoroutine(movementCoroutine);
+
+            movementCoroutine = StartCoroutine(MovementCoroutine());
+        }
+
+        IEnumerator MovementCoroutine()
+        {
+            while (true)
+            {
+                //do in fixed update
+                yield return new WaitForFixedUpdate();
+
+                //if stopped movement, stop coroutine
+                if (speed <= 0)
+                    yield break;
+
+                //move rigidbody then decrease speed
+                rb.velocity = direction * speed;
+                speed -= speedDecreaseAtSecond * Time.fixedDeltaTime;
+            }
         }
     }
 }

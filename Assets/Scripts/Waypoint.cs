@@ -1,52 +1,55 @@
-﻿using System.Collections;
-using UnityEngine;
-
-[AddComponentMenu("RogueBall/Waypoint")]
-public class Waypoint : MonoBehaviour
+﻿namespace RogueBall
 {
-    [Header("Important")]
-    [Tooltip("Is this waypoint active at start?")] [SerializeField] bool isActive = true;
-    [Tooltip("Can move player or enemy on this waypoint?")] [SerializeField] bool isPlayerWaypoint = true;
+    using System.Collections;
+    using UnityEngine;
 
-    [Header("Area Parry")]
-    [Tooltip("Area used for AreaParry")] [SerializeField] float areaParry = 0.3f;
-
-    public bool IsActive => isActive;
-    public bool IsPlayerWaypoint => isPlayerWaypoint;
-    public float AreaParry => areaParry;
-
-    Coroutine reactiveCoroutine;
-
-    void OnDrawGizmos()
+    [AddComponentMenu("RogueBall/Waypoint")]
+    public class Waypoint : MonoBehaviour
     {
-        //do only if active
-        if (IsActive)
+        [Header("Important")]
+        [Tooltip("Is this waypoint active at start?")] [SerializeField] bool isActive = true;
+        [Tooltip("Can move player or enemy on this waypoint?")] [SerializeField] bool isPlayerWaypoint = true;
+
+        [Header("Area Parry")]
+        [Tooltip("Area used for AreaParry")] [SerializeField] float areaParry = 0.3f;
+
+        public bool IsActive => isActive;
+        public bool IsPlayerWaypoint => isPlayerWaypoint;
+        public float AreaParry => areaParry;
+
+        Coroutine reactiveCoroutine;
+
+        void OnDrawGizmos()
         {
-            Gizmos.color = Color.red;
+            //do only if active
+            if (IsActive)
+            {
+                Gizmos.color = Color.red;
 
-            //draw area parry
-            Gizmos.DrawWireSphere(transform.position, areaParry);
+                //draw area parry
+                Gizmos.DrawWireSphere(transform.position, areaParry);
+            }
         }
-    }
 
-    public void Deactive(float timeToReactive)
-    {
-        //deactive
-        isActive = false;
+        public void Deactive(float timeToReactive)
+        {
+            //deactive
+            isActive = false;
 
-        //start coroutine to reactive
-        if (reactiveCoroutine != null)
-            StopCoroutine(reactiveCoroutine);
+            //start coroutine to reactive
+            if (reactiveCoroutine != null)
+                StopCoroutine(reactiveCoroutine);
 
-        reactiveCoroutine = StartCoroutine(ReactiveCoroutine(timeToReactive));
-    }
+            reactiveCoroutine = StartCoroutine(ReactiveCoroutine(timeToReactive));
+        }
 
-    IEnumerator ReactiveCoroutine(float timeToReactive)
-    {
-        //wait
-        yield return new WaitForSeconds(timeToReactive);
+        IEnumerator ReactiveCoroutine(float timeToReactive)
+        {
+            //wait
+            yield return new WaitForSeconds(timeToReactive);
 
-        //reactive
-        isActive = true;
+            //reactive
+            isActive = true;
+        }
     }
 }

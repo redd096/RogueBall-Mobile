@@ -1,6 +1,7 @@
 ﻿namespace redd096
 {
     using UnityEngine;
+    using RogueBall;
 
     [AddComponentMenu("redd096/Singletons/Game Manager")]
     public class GameManager : Singleton<GameManager>
