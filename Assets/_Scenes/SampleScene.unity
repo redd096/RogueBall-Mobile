@@ -223,7 +223,7 @@ PrefabInstance:
     - target: {fileID: 881243683086461837, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
       propertyPath: m_Name
-      value: Waypoint (8)
+      value: Waypoint (7)
       objectReference: {fileID: 0}
     - target: {fileID: 1827992292939336730, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
@@ -233,7 +233,7 @@ PrefabInstance:
     - target: {fileID: 5467414103568100061, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5467414103568100061, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
@@ -494,7 +494,7 @@ PrefabInstance:
     - target: {fileID: 881243683086461837, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
       propertyPath: m_Name
-      value: Waypoint (9)
+      value: Waypoint (8)
       objectReference: {fileID: 0}
     - target: {fileID: 1827992292939336730, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
@@ -504,7 +504,7 @@ PrefabInstance:
     - target: {fileID: 5467414103568100061, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5467414103568100061, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
@@ -952,12 +952,12 @@ Transform:
   - {fileID: 483843500}
   - {fileID: 1189874107}
   - {fileID: 1049845580}
-  - {fileID: 1689419779}
   - {fileID: 840073569}
+  - {fileID: 1689419779}
   - {fileID: 1034837245}
-  - {fileID: 1890971983}
   - {fileID: 75343982}
   - {fileID: 344395761}
+  - {fileID: 1890971983}
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1123,7 +1123,7 @@ PrefabInstance:
     - target: {fileID: 881243683086461837, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
       propertyPath: m_Name
-      value: Waypoint (5)
+      value: Waypoint (4)
       objectReference: {fileID: 0}
     - target: {fileID: 1827992292939336730, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
@@ -1133,7 +1133,7 @@ PrefabInstance:
     - target: {fileID: 5467414103568100061, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5467414103568100061, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
@@ -1835,7 +1835,7 @@ PrefabInstance:
     - target: {fileID: 881243683086461837, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
       propertyPath: m_Name
-      value: Waypoint (4)
+      value: Waypoint (5)
       objectReference: {fileID: 0}
     - target: {fileID: 1827992292939336730, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
@@ -1845,7 +1845,7 @@ PrefabInstance:
     - target: {fileID: 5467414103568100061, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5467414103568100061, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
@@ -2211,7 +2211,7 @@ PrefabInstance:
     - target: {fileID: 881243683086461837, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
       propertyPath: m_Name
-      value: Waypoint (7)
+      value: Waypoint (9)
       objectReference: {fileID: 0}
     - target: {fileID: 1827992292939336730, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
@@ -2221,7 +2221,7 @@ PrefabInstance:
     - target: {fileID: 5467414103568100061, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5467414103568100061, guid: 730ea86e8f3824243af846f7cf5b7805,
         type: 3}
@@ -2402,12 +2402,12 @@ MonoBehaviour:
   - {fileID: 483843501}
   - {fileID: 1189874108}
   - {fileID: 1049845581}
-  - {fileID: 1689419780}
   - {fileID: 840073570}
+  - {fileID: 1689419780}
   - {fileID: 1034837246}
-  - {fileID: 1890971984}
   - {fileID: 75343983}
   - {fileID: 344395762}
+  - {fileID: 1890971984}
 --- !u!4 &2094228574
 Transform:
   m_ObjectHideFlags: 0

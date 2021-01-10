@@ -1,5 +1,7 @@
 ﻿namespace RogueBall
 {
+    using System.Collections;
+    using System.Collections.Generic;
     using UnityEngine;
     using redd096;
 
@@ -10,9 +12,10 @@
         [Tooltip("Can enemy move in diagonal or only horizontal and vertical?")] [SerializeField] bool moveDiagonal = false;
 
         Character character;
+        Waypoint lastWaypoint;
 
-        Vector2Int direction;
-        float timer;
+        Coroutine pathCoroutine;
+        List<Waypoint> path = new List<Waypoint>();
 
         public MovingEnemyState(StateMachine stateMachine) : base(stateMachine)
         {
@@ -24,58 +27,67 @@
 
             character = stateMachine as Character;
 
-            //reset timer
-            timer = Time.time + timerMovement;
+            //reset path
+            lastWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, character.transform.position);
+            pathCoroutine = character.StartCoroutine(GetRandomPath());
         }
 
-        public override void Execution()
+        public override void Exit()
         {
-            base.Execution();
+            base.Exit();
 
-            //set direction until find one correct
-            if(character.CanMove(direction) == false)
+            //be sure to stop coroutine
+            if (pathCoroutine != null)
+                character.StopCoroutine(pathCoroutine);
+        }
+
+        IEnumerator GetRandomPath()
+        {
+            path = new List<Waypoint>();
+
+            //while can't use path
+            while (path == null || path.Count <= 0 || character.CanMove(path[0], moveDiagonal) == false)
             {
-                GetRandomDirection();
+                //try get path to random point
+                Waypoint randomWaypoint = GameManager.instance.mapManager.GetRandomWaypoint(character, lastWaypoint);
+                path = Pathfinding.FindPath(character, moveDiagonal, lastWaypoint, randomWaypoint);
+
+                yield return null;
+            }
+
+            //start move
+            pathCoroutine = character.StartCoroutine(Move());
+        }
+
+        IEnumerator Move()
+        {
+            while(path.Count > 0)
+            {
+                lastWaypoint = path[0];
 
                 //DEBUG
                 Enemy enemy = stateMachine as Enemy;
-                enemy.DebugArrow(direction);
-            }
+                enemy.DebugArrow((lastWaypoint.transform.position - character.transform.position).normalized);
 
-            //after timer, do movement
-            if (Time.time > timer)
-            {
-                if (character.Move(direction))
+                //wait
+                yield return new WaitForSeconds(timerMovement);
+
+                //if move, remove waypoint from path
+                if(character.Move(lastWaypoint, moveDiagonal))
                 {
-                    //update timer only if has been succesfull
-                    timer = Time.time + timerMovement;
+                    path.RemoveAt(0);
+                }
+                //if can't move, clear path
+                else
+                {
+                    Debug.LogWarning("Enemy can't reach waypoint");
+                    lastWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, character.transform.position);     //can't use lastWaypoint cause can't reach, than use current waypoint
+                    path.Clear();
                 }
             }
-        }
 
-        void GetRandomDirection()
-        {
-            direction = Vector2Int.zero;
-
-            //move horizontal
-            if (Random.value > 0.5f)
-            {
-                //move right or left
-                direction.x = Random.value > 0.5f ? 1 : -1;
-
-                //if move diagonal, random between -1, 0, 1
-                if (moveDiagonal)
-                    direction.y = Random.Range(-1, 2);
-            }
-            else
-            {
-                //move right or left
-                direction.y = Random.value > 0.5f ? 1 : -1;
-
-                //if move diagonal, random between -1, 0, 1
-                if (moveDiagonal)
-                    direction.x = Random.Range(-1, 2);
-            }
+            //get new path
+            pathCoroutine = character.StartCoroutine(GetRandomPath());
         }
     }
 }

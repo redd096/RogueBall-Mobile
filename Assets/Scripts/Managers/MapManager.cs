@@ -67,7 +67,7 @@
 
         #region public API
 
-        public Waypoint GetNearestWaypoint(Character character, Vector2 position, bool checkCharacter = true)
+        public Waypoint GetNearestWaypoint(Character character, Vector2 position)
         {
             bool isPlayer = character is Player;
 
@@ -79,7 +79,7 @@
             {
                 //only if there is a waypoint and is active
                 if (mapPlayer[key] == null || mapPlayer[key].IsActive == false
-                    || (mapPlayer[key].IsPlayerWaypoint != isPlayer && checkCharacter))                     //if is playerWaypoint but for enemy, or is enemyWaypoint but for player (and is check character)
+                    || mapPlayer[key].IsPlayerWaypoint != isPlayer)                 //if is playerWaypoint but for enemy, or is enemyWaypoint but for player
                     continue;
 
                 //check distance to find nearest
@@ -95,7 +95,7 @@
             return mapPlayer.ContainsKey(nearestKey) ? mapPlayer[nearestKey] : null;
         }
 
-        public Waypoint GetWaypointInDirection(Character character, Waypoint currentWaypoint, Vector2Int direction, bool checkCharacter = true)
+        public Waypoint GetWaypointInDirection(Character character, Waypoint currentWaypoint, Vector2Int direction)
         {
             bool isPlayer = character is Player;
 
@@ -106,7 +106,7 @@
 
             //if there is a waypoint in these coordinates, return it
             if (mapPlayer.ContainsKey(waypointKey) && mapPlayer[waypointKey] != null && mapPlayer[waypointKey].IsActive
-                && (mapPlayer[waypointKey].IsPlayerWaypoint == isPlayer || checkCharacter == false))        //is playerWaypoint for a player, or enemyWaypoint for enemy (or not check character)
+                && mapPlayer[waypointKey].IsPlayerWaypoint == isPlayer)             //is playerWaypoint for a player, or enemyWaypoint for enemy
             {
                 return mapPlayer[waypointKey];
             }
@@ -114,13 +114,13 @@
             return null;
         }
 
-        public List<Waypoint> GetNeighbours(Character character, Waypoint currentWaypoint, bool canDiagonal, bool checkCharacter = true)
+        public List<Waypoint> GetNeighbours(Character character, bool moveDiagonal, Waypoint currentWaypoint)
         {
             List<Waypoint> neighbours = new List<Waypoint>();
 
             //get every direction
             List<Vector2Int> directions = new List<Vector2Int>() { Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left };
-            if(canDiagonal)
+            if(moveDiagonal)
             {
                 //up right, down right, up left, down left
                 directions.Add(new Vector2Int(1, 1));
@@ -132,12 +132,32 @@
             //foreach direction, check if there is a waypoint to add
             foreach(Vector2Int direction in directions)
             {
-                Waypoint waypoint = GetWaypointInDirection(character, currentWaypoint, direction, checkCharacter);
+                Waypoint waypoint = GetWaypointInDirection(character, currentWaypoint, direction);
                 if (waypoint)
                     neighbours.Add(waypoint);
             }
 
             return neighbours;
+        }
+
+        public Waypoint GetRandomWaypoint(Character character, Waypoint currentWaypoint)
+        {
+            bool isPlayer = character is Player;
+            List<Waypoint> possibleWaypoints = new List<Waypoint>();
+
+            //add every possible waypoint
+            foreach(Waypoint waypoint in mapPlayer.Values)
+            {
+                //if waypoint is not current waypoint and is active
+                if(waypoint != currentWaypoint && waypoint.IsActive
+                    && waypoint.IsPlayerWaypoint == isPlayer)                   //is playerWaypoint for a player, or enemyWaypoint for enemy
+                {
+                    possibleWaypoints.Add(waypoint);
+                }
+            }
+
+            //return one random
+            return possibleWaypoints[Random.Range(0, possibleWaypoints.Count)];
         }
 
         #endregion

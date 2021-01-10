@@ -186,17 +186,17 @@
         /// <summary>
         /// from state machine to component
         /// </summary>
-        public bool Move(Vector2Int direction)
+        public bool Move(Waypoint targetWaypoint, bool moveDiagonal)
         {
-            return CurrentMovement && CurrentMovement.Move(direction);
+            return CurrentMovement && CurrentMovement.Move(targetWaypoint, moveDiagonal);
         }
 
         /// <summary>
         /// from state machine to component
         /// </summary>
-        public bool CanMove(Vector2Int direction)
+        public bool CanMove(Waypoint targetWaypoint, bool moveDiagonal)
         {
-            return CurrentMovement && CurrentMovement.CanMove(direction);
+            return CurrentMovement && CurrentMovement.CanMove(targetWaypoint, moveDiagonal);
         }
 
         /// <summary>

@@ -6,7 +6,17 @@
 
     public static class Pathfinding
     {
-        public static List<Waypoint> FindPath(Vector2 startPosition, Vector2 targetPosition, bool canDiagonal)
+        public static List<Waypoint> FindPath(Character character, bool moveDiagonal, Vector2 startPosition, Vector2 targetPosition)
+        {
+            //get nodes from world position
+            Waypoint startWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, startPosition);
+            Waypoint targetWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, targetPosition);
+
+            //return path
+            return FindPath(character, moveDiagonal, startWaypoint, targetWaypoint);
+        }
+
+        public static List<Waypoint> FindPath(Character character, bool moveDiagonal, Waypoint startWaypoint, Waypoint targetWaypoint)
         {
             /*
              * OPEN - the set of nodes to be evaluated
@@ -41,10 +51,6 @@
              *          add Neighbour to OPEN
              */
 
-            //get nodes from world position
-            Waypoint startWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(null, startPosition, false);
-            Waypoint targetWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(null, targetPosition, false);
-
             List<Waypoint> openList = new List<Waypoint>();     //nodes to be evaluated
             List<Waypoint> closedList = new List<Waypoint>();   //already evaluated
 
@@ -73,7 +79,7 @@
                     return CreatePath(startWaypoint, currentWaypoint);
 
                 //foreach Neighbour of the Current node (only walkables)
-                foreach (Waypoint neighbour in GameManager.instance.mapManager.GetNeighbours(null, currentWaypoint, canDiagonal, false))
+                foreach (Waypoint neighbour in GameManager.instance.mapManager.GetNeighbours(character, moveDiagonal, currentWaypoint))
                 {
                     //if is in CLOSED, skip it
                     if (closedList.Contains(neighbour))

@@ -23,7 +23,6 @@
                 currentWaypoint = value;
             }
         }
-        protected Waypoint newWaypoint;
 
         void OnEnable()
         {
@@ -46,21 +45,19 @@
             }
         }
 
-        protected void SetAnimator(Vector2Int direction, bool move)
+        protected void SetAnimator(Vector2 direction, bool move)
         {
             anim?.SetFloat("Horizontal", direction.x);
             anim?.SetFloat("Vertical", direction.y);
             anim?.SetBool("Move", move);
         }
 
-        public abstract bool Move(Vector2Int direction);
+        public abstract bool Move(Waypoint targetWaypoint, bool moveDiagonal);
 
-        public bool CanMove(Vector2Int direction)
+        public bool CanMove(Waypoint targetWaypoint, bool moveDiagonal)
         {
-            //get waypoint to move
-            newWaypoint = GameManager.instance.mapManager.GetWaypointInDirection(character, CurrentWaypoint, direction);
-
-            return newWaypoint != null && newWaypoint != CurrentWaypoint;
+            //if not current waypoint and is neighbour
+            return targetWaypoint != CurrentWaypoint && GameManager.instance.mapManager.GetNeighbours(character, moveDiagonal, CurrentWaypoint).Contains(targetWaypoint);
         }
     }
 }

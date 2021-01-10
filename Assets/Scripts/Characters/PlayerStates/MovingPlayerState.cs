@@ -10,12 +10,21 @@
         [Tooltip("Release display before this time to get a swipe movement")] [SerializeField] float timeToRelease = 1;
         [Tooltip("Inside this range, is not considered input")] [SerializeField] float deadZone = 100;
 
+        Character character;
+
         bool isSwiping;
         Vector2 startSwipePosition;
         float timeToSwipe;
 
         public MovingPlayerState(StateMachine stateMachine) : base(stateMachine)
         {
+        }
+
+        public override void Enter()
+        {
+            base.Enter();
+
+            character = stateMachine as Character;
         }
 
         public override void Execution()
@@ -97,9 +106,12 @@
                 }
             }
 
+            //get waypoints
+            Waypoint currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, character.transform.position);
+            Waypoint targetWaypoint = GameManager.instance.mapManager.GetWaypointInDirection(character, currentWaypoint, direction);
+
             //swipe (direction using 1 and -1)
-            Character character = stateMachine as Character;
-            character.Move(direction);
+            character.Move(targetWaypoint, moveDiagonal);
         }
 
         #region inputs
