@@ -51,8 +51,9 @@
         {
             base.Execution();
 
-            //if ball has speed greater than 0, stop follow it
-            if(ballToReach.Speed > 0)
+            //if ball waypoint is not in the path, there is a problem (check also last waypoint, cause maybe we finished the path)
+            Waypoint ballWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, ballToReach.transform.position, false);
+            if (path.Contains(ballWaypoint) == false && lastWaypoint != ballWaypoint)
             {
                 character.StopFollowBall();
             }
@@ -102,8 +103,12 @@
                 }
             }
 
-            //reached ball
-            //TODO trova il modo di essere certo di aver preso la palla, altrimenti torna in moving enemy state
+            //if ballWaypoint != last waypoint there is a problem, cause we finished the path
+            Waypoint ballWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, ballToReach.transform.position, false);
+            if (ballWaypoint != lastWaypoint)
+            {
+                character.StopFollowBall();
+            }
         }
     }
 }
