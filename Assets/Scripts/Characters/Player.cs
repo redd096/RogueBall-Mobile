@@ -9,10 +9,8 @@
         [SerializeField] MovingPlayerState movingState = default;
         [SerializeField] ThrowPlayerState throwState = default;
 
-        protected override void Start()
+        void Start()
         {
-            base.Start();
-
             //set start state
             SetState(movingState);
         }
@@ -25,18 +23,18 @@
             SetState(throwState);
         }
 
-        public override void ThrowBall(Vector2 direction)
+        public override bool ThrowBall(Vector2 direction)
         {
-            base.ThrowBall(direction);
-
             //set moving state
             SetState(movingState);
+
+            return base.ThrowBall(direction);
         }
 
         protected override void DeathFunction()
         {
             //disable movement and parry
-            SetState(null);
+            //SetState(null);
 
             Debug.Log("dead");
         }

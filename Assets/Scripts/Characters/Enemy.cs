@@ -9,10 +9,35 @@
         [SerializeField] MovingEnemyState movingState = default;
         [SerializeField] ThrowEnemyState throwState = default;
 
-        protected override void Start()
-        {
-            base.Start();
+        [Header("DEBUG")]
+        [SerializeField] Transform arrow = default;
 
+        public void DebugArrow(Vector2 direction)
+        {
+            //0, 45, 90, 135, 180, -135 (225), -90 (270), -45 (315), 0 (360)
+            float z = 0;
+
+            if(direction.y >= Mathf.Epsilon)
+            {
+                //-1 = 45
+                //0 = 0
+                //1 = -45 (315)
+                z = redd096.Utility.Remap(direction.x, -1, 1, 90, -90);
+            }
+            else
+            {
+                //-1 = 135
+                //0 = 180
+                //1 = -135 (255)
+
+                z = redd096.Utility.Remap(direction.x, -1, 1, 90, 270);
+            }
+
+            arrow.localEulerAngles = new Vector3(0, 0, z);
+        }
+
+        void Start()
+        {
             //set start state
             SetState(movingState);
         }
@@ -25,12 +50,12 @@
             SetState(throwState);
         }
 
-        public override void ThrowBall(Vector2 direction)
+        public override bool ThrowBall(Vector2 direction)
         {
-            base.ThrowBall(direction);
-
             //set moving state
             SetState(movingState);
+
+            return base.ThrowBall(direction);
         }
 
         protected override void DeathFunction()

@@ -28,9 +28,6 @@
                 //check distance
                 if (Vector2.Distance(currentWaypoint.transform.position, transform.position) <= currentWaypoint.AreaParry)
                 {
-                    //parry
-                    character.Parry();
-
                     return true;
                 }
             }

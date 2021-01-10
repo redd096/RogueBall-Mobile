@@ -9,8 +9,7 @@
         [Tooltip("Timer between one moves and another")] [SerializeField] float timerMovement = 1;
         [Tooltip("Can enemy move in diagonal or only horizontal and vertical?")] [SerializeField] bool moveDiagonal = false;
 
-        [Header("DEBUG")]
-        [SerializeField] Transform arrow = default;
+        Character character;
 
         Vector2Int direction;
         float timer;
@@ -23,30 +22,38 @@
         {
             base.Enter();
 
-            //update timer and set direction
+            character = stateMachine as Character;
+
+            //reset timer
             timer = Time.time + timerMovement;
-            direction = GetRandomDirection();
-            DebugArrow();
         }
 
         public override void Execution()
         {
             base.Execution();
 
+            //set direction until find one correct
+            if(character.CanMove(direction) == false)
+            {
+                GetRandomDirection();
+
+                //DEBUG
+                Enemy enemy = stateMachine as Enemy;
+                enemy.DebugArrow(direction);
+            }
+
             //after timer, do movement
             if (Time.time > timer)
             {
-                Character character = stateMachine as Character;
-                character.Move(direction);
-
-                //update timer and set direction
-                timer = Time.time + timerMovement;
-                direction = GetRandomDirection();
-                DebugArrow();
+                if (character.Move(direction))
+                {
+                    //update timer only if has been succesfull
+                    timer = Time.time + timerMovement;
+                }
             }
         }
 
-        Vector2Int GetRandomDirection()
+        void GetRandomDirection()
         {
             direction = Vector2Int.zero;
 
@@ -69,29 +76,6 @@
                 if (moveDiagonal)
                     direction.x = Random.Range(-1, 2);
             }
-
-            return direction;
-        }
-
-        void DebugArrow()
-        {
-            //0, 45, 90, 135, 180, -135 (225), -90 (270), -45 (315)
-            if (direction.y > 0 && direction.x == 0)
-                arrow.localEulerAngles = new Vector3(0, 0, 0);
-            else if (direction.y > 0 && direction.x < 0)
-                arrow.localEulerAngles = new Vector3(0, 0, 45);
-            else if (direction.y == 0 && direction.x < 0)
-                arrow.localEulerAngles = new Vector3(0, 0, 90);
-            else if (direction.y < 0 && direction.x < 0)
-                arrow.localEulerAngles = new Vector3(0, 0, 135);
-            else if (direction.y < 0 && direction.x == 0)
-                arrow.localEulerAngles = new Vector3(0, 0, 180);
-            else if (direction.y < 0 && direction.x > 0)
-                arrow.localEulerAngles = new Vector3(0, 0, 255);
-            else if (direction.y == 0 && direction.x > 0)
-                arrow.localEulerAngles = new Vector3(0, 0, 270);
-            else
-                arrow.localEulerAngles = new Vector3(0, 0, 315);
         }
     }
 }

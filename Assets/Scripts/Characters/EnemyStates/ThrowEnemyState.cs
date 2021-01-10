@@ -9,6 +9,7 @@
         [Tooltip("Timer between one throw and another")] [SerializeField] float timerThrow = 1;
         [Tooltip("Aim at player or throw random?")] [SerializeField] bool aimAtPlayer = true;
 
+        Vector2 direction;
         float timer;
 
         public ThrowEnemyState(StateMachine stateMachine) : base(stateMachine)
@@ -21,24 +22,34 @@
 
             //reset timer
             timer = Time.time + timerThrow;
+
+            //set direction to throw
+            direction = GetDirection();
+
+            //DEBUG
+            Enemy enemy = stateMachine as Enemy;
+            enemy.DebugArrow(direction);
         }
 
         public override void Execution()
         {
             base.Execution();
 
-            //after timer, do movement
+            //after timer, throw
             if (Time.time > timer)
             {
-                //update timer
-                timer = Time.time + timerThrow;
-
-                Throw(GetDirection());
+                Character character = stateMachine as Character;
+                if (character.ThrowBall(direction))
+                {
+                    //update timer only if has been succesfull
+                    timer = Time.time + timerThrow;
+                }
             }
         }
 
         Vector2 GetDirection()
         {
+            //aim at player or random
             if (aimAtPlayer)
             {
                 return (GameManager.instance.player.transform.position - stateMachine.transform.position).normalized;
@@ -47,13 +58,6 @@
             {
                 return Random.insideUnitCircle;
             }
-        }
-
-        void Throw(Vector2 direction)
-        {
-            //throw ball
-            Character character = stateMachine as Character;
-            character.ThrowBall(direction);
         }
     }
 }

@@ -23,7 +23,6 @@
             //if timer is not ended, parry
             if (Time.time < timer)
             {
-                character.Parry();
                 return true;
             }
 

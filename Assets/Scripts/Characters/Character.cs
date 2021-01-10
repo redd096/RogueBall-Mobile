@@ -1,15 +1,15 @@
 ﻿namespace RogueBall
 {
     using UnityEngine;
+    using redd096;
 
-    public abstract class Character : redd096.StateMachine
+    public abstract class Character : StateMachine
     {
         #region variables
 
         [Header("Important")]
         [SerializeField] float health = 100;
-
-        protected Animator anim;
+        [Tooltip("Damage when receive parry")] [SerializeField] float parryDamage = 100;
 
         Ball currentBall;
         bool isDead;
@@ -108,21 +108,16 @@
 
         #endregion
 
-        protected virtual void Start()
-        {
-            anim = GetComponentInChildren<Animator>();
-        }
-
         void OnTriggerEnter2D(Collider2D collision)
         {
             //if hit ball
             Ball ball = collision.gameObject.GetComponentInParent<Ball>();
-            if (ball && ball.CanHit(transform))
+            if (ball && ball.CanHit(this))
             {
-                if (ball.CanDamage)
+                if (ball.CanDamage(this))
                 {
                     //get damage
-                    GetDamage(ball.Damage);
+                    GetDamage(ball);
                 }
 
                 //if no current ball, pick ball
@@ -131,16 +126,17 @@
             }
         }
 
-        void GetDamage(float damage)
+        void GetDamage(Ball ball)
         {
             //try parry
-            if (CurrentParry && CurrentParry.TryParry())
+            if (TryParry())
             {
+                ball.Owner.GetParryDamage();
                 return;
             }
 
             //else get damage and check death
-            health -= damage;
+            health -= ball.Damage;
             if (health <= 0)
             {
                 Die();
@@ -158,6 +154,8 @@
             DeathFunction();
         }
 
+        protected abstract void DeathFunction();
+
         protected virtual void PickBall(Ball ball)
         {
             //get ball and deactive it
@@ -165,37 +163,48 @@
             ball.gameObject.SetActive(false);
         }
 
-        protected abstract void DeathFunction();
+        public void GetParryDamage()
+        {
+            //else get parry damage and check death
+            health -= parryDamage;
+            if (health <= 0)
+            {
+                Die();
+            }
+        }
 
-        #region public API
+        #region components API
 
         /// <summary>
         /// from state machine to component
         /// </summary>
-        public virtual void ThrowBall(Vector2 direction)
+        public virtual bool ThrowBall(Vector2 direction)
         {
-            CurrentThrowBall.Throw(currentBall, direction);
+            return CurrentThrowBall && CurrentThrowBall.Throw(currentBall, direction);
         }
 
         /// <summary>
         /// from state machine to component
         /// </summary>
-        public void Move(Vector2Int direction)
+        public bool Move(Vector2Int direction)
         {
-            //set animator
-            anim?.SetFloat("Horizontal", direction.x);
-            anim?.SetFloat("Vertical", direction.y);
-
-            //do movement
-            CurrentMovement.Move(direction);
+            return CurrentMovement && CurrentMovement.Move(direction);
         }
 
         /// <summary>
-        /// from component, do parry
+        /// from state machine to component
         /// </summary>
-        public void Parry()
+        public bool CanMove(Vector2Int direction)
         {
-            Debug.Log("Miiii un parry!");
+            return CurrentMovement && CurrentMovement.CanMove(direction);
+        }
+
+        /// <summary>
+        /// from get damage to component
+        /// </summary>
+        bool TryParry()
+        {
+            return CurrentParry && CurrentParry.TryParry();
         }
 
         #endregion

@@ -9,14 +9,21 @@
         [Tooltip("Force throw")] [SerializeField] float force = 3;
         [SerializeField] float damage = 100;
 
-        public override void Throw(Ball ball, Vector2 direction)
+        public override bool Throw(Ball ball, Vector2 direction)
         {
-            //set ball position and activate
-            ball.transform.position = transform.position;
-            ball.gameObject.SetActive(true);
+            if (ball)
+            {
+                //set ball position and activate
+                ball.transform.position = transform.position;
+                ball.gameObject.SetActive(true);
 
-            //throw ball
-            ball.Throw(force, direction, damage, transform);
+                //throw ball
+                ball.Throw(force, direction, damage, character);
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

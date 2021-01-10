@@ -12,54 +12,55 @@
         [Tooltip("Time to stay in new waypoint before come back to start waypoint")] [SerializeField] float timeBeforeComeBack = 0.1f;
         [Tooltip("Duration movement to come back to start waypoint")] [SerializeField] float timeComeBack = 0.3f;
 
-        public override void Move(Vector2Int direction)
+        Coroutine movementCoroutine;
+
+        public override bool Move(Vector2Int direction)
         {
             //if no coroutine, start movement in direction
             if (movementCoroutine == null)
             {
-                movementCoroutine = StartCoroutine(MovementCoroutine(direction));
+                if (CanMove(direction))
+                {
+                    movementCoroutine = StartCoroutine(MovementCoroutine(direction));
+                    return true;
+                }
             }
+
+            return false;
         }
 
         IEnumerator MovementCoroutine(Vector2Int direction)
         {
-            //get waypoint to move
-            Vector2Int newKey;
-            Waypoint newWaypoint = GameManager.instance.mapManager.GetWaypointInDirection(character, currentKey, direction, out newKey);
+            //start swipe
+            character.onMove?.Invoke(CurrentWaypoint, newWaypoint);
+            SetAnimator(direction, true);
 
-            if (newWaypoint != null)
+            //move to new waypoint
+            float delta = 0;
+            while (delta < 1)
             {
-                //start swipe
-                character.onMove?.Invoke(CurrentWaypoint, newWaypoint);
-                anim?.SetBool("Move", true);
+                delta += Time.deltaTime / timeMovement;
 
-                //move to new waypoint
-                float delta = 0;
-                while (delta < 1)
-                {
-                    delta += Time.deltaTime / timeMovement;
-
-                    transform.position = Vector2.Lerp(CurrentWaypoint.transform.position, newWaypoint.transform.position, delta);
-                    yield return null;
-                }
-
-                //wait before come back
-                yield return new WaitForSeconds(timeBeforeComeBack);
-
-                //come back to position
-                delta = 0;
-                while (delta < 1)
-                {
-                    delta += Time.deltaTime / timeComeBack;
-
-                    transform.position = Vector2.Lerp(newWaypoint.transform.position, CurrentWaypoint.transform.position, delta);
-                    yield return null;
-                }
-
-                //end swipe
-                character.onEndMove?.Invoke();
-                anim?.SetBool("Move", false);
+                transform.position = Vector2.Lerp(CurrentWaypoint.transform.position, newWaypoint.transform.position, delta);
+                yield return null;
             }
+
+            //wait before come back
+            yield return new WaitForSeconds(timeBeforeComeBack);
+
+            //come back to position
+            delta = 0;
+            while (delta < 1)
+            {
+                delta += Time.deltaTime / timeComeBack;
+
+                transform.position = Vector2.Lerp(newWaypoint.transform.position, CurrentWaypoint.transform.position, delta);
+                yield return null;
+            }
+
+            //end swipe
+            character.onEndMove?.Invoke();
+            SetAnimator(direction, false);
 
             movementCoroutine = null;
         }

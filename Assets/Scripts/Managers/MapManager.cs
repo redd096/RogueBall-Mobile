@@ -90,8 +90,9 @@
                 }
             }
 
+            //return nearest (or null if no waypoints)
             waypointKey = nearestKey;
-            return mapPlayer[nearestKey];
+            return mapPlayer.ContainsKey(nearestKey) ? mapPlayer[nearestKey] : null;
         }
 
         public Waypoint GetWaypointInDirection(Character character, Vector2Int currentKey, Vector2Int direction, out Vector2Int waypointKey)
@@ -104,9 +105,11 @@
             waypointKey = new Vector2Int(x, y);
 
             //if there is a waypoint in these coordinates, return it
-            if (mapPlayer.ContainsKey(waypointKey) && mapPlayer[waypointKey].IsActive
+            if (mapPlayer.ContainsKey(waypointKey) && mapPlayer[waypointKey] != null && mapPlayer[waypointKey].IsActive
                 && mapPlayer[waypointKey].IsPlayerWaypoint == isPlayer)                 //is playerWaypoint for a player, or enemyWaypoint for enemy
+            {
                 return mapPlayer[waypointKey];
+            }
 
             return null;
         }

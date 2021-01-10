@@ -11,6 +11,6 @@
             character = GetComponent<Character>();
         }
 
-        public abstract void Throw(Ball ball, Vector2 direction);
+        public abstract bool Throw(Ball ball, Vector2 direction);
     }
 }

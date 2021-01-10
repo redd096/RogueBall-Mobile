@@ -70,13 +70,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  parryDamage: 100
   movingState:
     timerMovement: 1
     moveDiagonal: 0
-    arrow: {fileID: 1618752700562295028}
   throwState:
     timerThrow: 1
     aimAtPlayer: 1
+  arrow: {fileID: 1618752700562295028}
 --- !u!114 &1618752700562295033
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -17,14 +17,14 @@
         Vector2 direction;
         Coroutine movementCoroutine;
 
-        //damage if speed greater than 0
+        //damage
         float damage;
-        public bool CanDamage => speed > 0;
         public float Damage => damage;
 
         //owner
-        Transform owner;
+        Character owner;
         bool ownerCanBeHitted;
+        public Character Owner => owner;
 
         #region test throw by inspector
 
@@ -87,12 +87,19 @@
             ownerCanBeHitted = true;
         }
 
-        public bool CanHit(Transform hit)
+        public bool CanHit(Character hit)
         {
-            return hit != owner || ownerCanBeHitted;
+            //check if can hit owner (when owner throw ball doesn't have to repick immediatly)
+            return hit != Owner || ownerCanBeHitted;
         }
 
-        public void Throw(float speed, Vector2 direction, float damage, Transform owner)
+        public bool CanDamage(Character hit)
+        {
+            //check speed (so can damage) and didn't hit owner
+            return hit != Owner && speed > 0;
+        }
+
+        public void Throw(float speed, Vector2 direction, float damage, Character owner)
         {
             //throw values
             this.speed = speed;

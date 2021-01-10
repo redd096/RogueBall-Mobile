@@ -6,7 +6,7 @@
     public abstract class BaseMovement : MonoBehaviour
     {
         protected Character character;
-        protected Animator anim;
+        Animator anim;
 
         Waypoint currentWaypoint;
         protected Waypoint CurrentWaypoint
@@ -25,7 +25,8 @@
         }
         protected Vector2Int currentKey;
 
-        protected Coroutine movementCoroutine;
+        protected Waypoint newWaypoint;
+        protected Vector2Int newKey;
 
         void OnEnable()
         {
@@ -33,9 +34,8 @@
             anim = GetComponentInChildren<Animator>();
 
             //get current waypoint and set to its position
-            if (GameManager.instance && GameManager.instance.mapManager)
+            if (GameManager.instance && GameManager.instance.mapManager && CurrentWaypoint)
             {
-                CurrentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, transform.position, out currentKey);
                 transform.position = CurrentWaypoint.transform.position;
             }
         }
@@ -43,10 +43,27 @@
         void Start()
         {
             //get current waypoint and set to its position - cause on enable is called before singleton
-            CurrentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, transform.position, out currentKey);
-            transform.position = CurrentWaypoint.transform.position;
+            if (CurrentWaypoint)
+            {
+                transform.position = CurrentWaypoint.transform.position;
+            }
         }
 
-        public abstract void Move(Vector2Int direction);
+        protected void SetAnimator(Vector2Int direction, bool move)
+        {
+            anim?.SetFloat("Horizontal", direction.x);
+            anim?.SetFloat("Vertical", direction.y);
+            anim?.SetBool("Move", move);
+        }
+
+        public abstract bool Move(Vector2Int direction);
+
+        public bool CanMove(Vector2Int direction)
+        {
+            //get waypoint to move
+            newWaypoint = GameManager.instance.mapManager.GetWaypointInDirection(character, currentKey, direction, out newKey);
+
+            return newWaypoint != null && newWaypoint != CurrentWaypoint;
+        }
     }
 }
