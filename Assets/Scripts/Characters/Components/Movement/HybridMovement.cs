@@ -45,7 +45,6 @@
 
             //save new waypoint
             CurrentWaypoint = newWaypoint;
-            currentKey = newKey;
 
             //end swipe
             character.onEndMove?.Invoke();

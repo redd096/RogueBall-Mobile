@@ -13,11 +13,24 @@
         [Header("Area Parry")]
         [Tooltip("Area used for AreaParry")] [SerializeField] float areaParry = 0.3f;
 
+        public Vector2Int PositionInMap { get; set; }
+
         public bool IsActive => isActive;
         public bool IsPlayerWaypoint => isPlayerWaypoint;
         public float AreaParry => areaParry;
 
         Coroutine reactiveCoroutine;
+
+        #region variables path finding
+
+        public int gCost { get; set; }                      //distance from start point
+        public int hCost { get; set; }                      //distance from end point
+        public int fCost => gCost + hCost;                  //sum of G cost and H cost
+
+        //used to retrace path
+        public Waypoint parentWaypoint { get; set; }
+
+        #endregion
 
         void OnDrawGizmos()
         {

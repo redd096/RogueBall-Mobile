@@ -14,7 +14,7 @@
             get
             {
                 if (currentWaypoint == null)
-                    currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, transform.position, out currentKey);
+                    currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, transform.position);
 
                 return currentWaypoint;
             }
@@ -23,10 +23,7 @@
                 currentWaypoint = value;
             }
         }
-        protected Vector2Int currentKey;
-
         protected Waypoint newWaypoint;
-        protected Vector2Int newKey;
 
         void OnEnable()
         {
@@ -61,7 +58,7 @@
         public bool CanMove(Vector2Int direction)
         {
             //get waypoint to move
-            newWaypoint = GameManager.instance.mapManager.GetWaypointInDirection(character, currentKey, direction, out newKey);
+            newWaypoint = GameManager.instance.mapManager.GetWaypointInDirection(character, CurrentWaypoint, direction);
 
             return newWaypoint != null && newWaypoint != CurrentWaypoint;
         }

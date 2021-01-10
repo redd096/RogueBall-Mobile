@@ -50,8 +50,7 @@
             if (isMoving)
             {
                 //get current waypoint
-                Vector2Int currentKey;
-                Waypoint currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, transform.position, out currentKey);
+                Waypoint currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, transform.position);
 
                 //check parry
                 return CheckParry(currentWaypoint);

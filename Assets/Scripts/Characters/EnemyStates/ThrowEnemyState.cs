@@ -35,6 +35,17 @@
         {
             base.Execution();
 
+            //temp
+            if(aimAtPlayer)
+            {
+                //set direction to throw
+                direction = GetDirection();
+
+                //DEBUG
+                Enemy enemy = stateMachine as Enemy;
+                enemy.DebugArrow(direction);
+            }
+
             //after timer, throw
             if (Time.time > timer)
             {

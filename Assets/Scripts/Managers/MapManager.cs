@@ -59,14 +59,15 @@
                 }
 
                 //add to map and increase x
-                mapPlayer.Add(new Vector2Int(x, y), currentWaypoint);
+                currentWaypoint.PositionInMap = new Vector2Int(x, y);
+                mapPlayer.Add(currentWaypoint.PositionInMap, currentWaypoint);
                 x++;
             }
         }
 
         #region public API
 
-        public Waypoint GetNearestWaypoint(Character character, Vector2 position, out Vector2Int waypointKey)
+        public Waypoint GetNearestWaypoint(Character character, Vector2 position, bool checkCharacter = true)
         {
             bool isPlayer = character is Player;
 
@@ -78,7 +79,7 @@
             {
                 //only if there is a waypoint and is active
                 if (mapPlayer[key] == null || mapPlayer[key].IsActive == false
-                    || mapPlayer[key].IsPlayerWaypoint != isPlayer)                     //if is playerWaypoint but for enemy, or is enemyWaypoint but for player
+                    || (mapPlayer[key].IsPlayerWaypoint != isPlayer && checkCharacter))                     //if is playerWaypoint but for enemy, or is enemyWaypoint but for player (and is check character)
                     continue;
 
                 //check distance to find nearest
@@ -91,27 +92,52 @@
             }
 
             //return nearest (or null if no waypoints)
-            waypointKey = nearestKey;
             return mapPlayer.ContainsKey(nearestKey) ? mapPlayer[nearestKey] : null;
         }
 
-        public Waypoint GetWaypointInDirection(Character character, Vector2Int currentKey, Vector2Int direction, out Vector2Int waypointKey)
+        public Waypoint GetWaypointInDirection(Character character, Waypoint currentWaypoint, Vector2Int direction, bool checkCharacter = true)
         {
             bool isPlayer = character is Player;
 
             //get key
-            int x = currentKey.x + direction.x;
-            int y = currentKey.y + direction.y;
-            waypointKey = new Vector2Int(x, y);
+            int x = currentWaypoint.PositionInMap.x + direction.x;
+            int y = currentWaypoint.PositionInMap.y + direction.y;
+            Vector2Int waypointKey = new Vector2Int(x, y);
 
             //if there is a waypoint in these coordinates, return it
             if (mapPlayer.ContainsKey(waypointKey) && mapPlayer[waypointKey] != null && mapPlayer[waypointKey].IsActive
-                && mapPlayer[waypointKey].IsPlayerWaypoint == isPlayer)                 //is playerWaypoint for a player, or enemyWaypoint for enemy
+                && (mapPlayer[waypointKey].IsPlayerWaypoint == isPlayer || checkCharacter == false))        //is playerWaypoint for a player, or enemyWaypoint for enemy (or not check character)
             {
                 return mapPlayer[waypointKey];
             }
 
             return null;
+        }
+
+        public List<Waypoint> GetNeighbours(Character character, Waypoint currentWaypoint, bool canDiagonal, bool checkCharacter = true)
+        {
+            List<Waypoint> neighbours = new List<Waypoint>();
+
+            //get every direction
+            List<Vector2Int> directions = new List<Vector2Int>() { Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left };
+            if(canDiagonal)
+            {
+                //up right, down right, up left, down left
+                directions.Add(new Vector2Int(1, 1));
+                directions.Add(new Vector2Int(1, -1));
+                directions.Add(new Vector2Int(-1, 1));
+                directions.Add(new Vector2Int(-1, -1));
+            }
+
+            //foreach direction, check if there is a waypoint to add
+            foreach(Vector2Int direction in directions)
+            {
+                Waypoint waypoint = GetWaypointInDirection(character, currentWaypoint, direction, checkCharacter);
+                if (waypoint)
+                    neighbours.Add(waypoint);
+            }
+
+            return neighbours;
         }
 
         #endregion
