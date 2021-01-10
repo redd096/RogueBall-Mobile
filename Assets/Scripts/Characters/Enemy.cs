@@ -63,5 +63,14 @@
             //destroy
             Destroy(gameObject);
         }
+
+        /// <summary>
+        /// called from state when there is a problem to reach a ball
+        /// </summary>
+        public void StopFollowBall()
+        {
+            //set moving state
+            SetState(movingState);
+        }
     }
 }

@@ -67,7 +67,7 @@
 
         #region public API
 
-        public Waypoint GetNearestWaypoint(Character character, Vector2 position)
+        public Waypoint GetNearestWaypoint(Character character, Vector2 position, bool checkCharacter = true)
         {
             bool isPlayer = character is Player;
 
@@ -79,7 +79,7 @@
             {
                 //only if there is a waypoint and is active
                 if (mapPlayer[key] == null || mapPlayer[key].IsActive == false
-                    || mapPlayer[key].IsPlayerWaypoint != isPlayer)                 //if is playerWaypoint but for enemy, or is enemyWaypoint but for player
+                    || (mapPlayer[key].IsPlayerWaypoint != isPlayer && checkCharacter))                 //if is playerWaypoint but for enemy, or is enemyWaypoint but for player (only if checkCharacter true)
                     continue;
 
                 //check distance to find nearest
@@ -106,7 +106,7 @@
 
             //if there is a waypoint in these coordinates, return it
             if (mapPlayer.ContainsKey(waypointKey) && mapPlayer[waypointKey] != null && mapPlayer[waypointKey].IsActive
-                && mapPlayer[waypointKey].IsPlayerWaypoint == isPlayer)             //is playerWaypoint for a player, or enemyWaypoint for enemy
+                && mapPlayer[waypointKey].IsPlayerWaypoint == isPlayer)                                 //is playerWaypoint for a player, or enemyWaypoint for enemy
             {
                 return mapPlayer[waypointKey];
             }
@@ -150,7 +150,7 @@
             {
                 //if waypoint is not current waypoint and is active
                 if(waypoint != currentWaypoint && waypoint.IsActive
-                    && waypoint.IsPlayerWaypoint == isPlayer)                   //is playerWaypoint for a player, or enemyWaypoint for enemy
+                    && waypoint.IsPlayerWaypoint == isPlayer)                                               //is playerWaypoint for a player, or enemyWaypoint for enemy
                 {
                     possibleWaypoints.Add(waypoint);
                 }

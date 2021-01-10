@@ -19,11 +19,13 @@
 
         //damage
         float damage;
-        public float Damage => damage;
 
         //owner
         Character owner;
         bool ownerCanBeHitted;
+
+        public float Speed => speed;
+        public float Damage => damage;
         public Character Owner => owner;
 
         #region test throw by inspector

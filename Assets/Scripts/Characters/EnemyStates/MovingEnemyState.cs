@@ -12,9 +12,9 @@
         [Tooltip("Can enemy move in diagonal or only horizontal and vertical?")] [SerializeField] bool moveDiagonal = false;
 
         Character character;
-        Waypoint lastWaypoint;
-
         Coroutine pathCoroutine;
+
+        Waypoint lastWaypoint;
         List<Waypoint> path = new List<Waypoint>();
 
         public MovingEnemyState(StateMachine stateMachine) : base(stateMachine)
@@ -39,6 +39,33 @@
             //be sure to stop coroutine
             if (pathCoroutine != null)
                 character.StopCoroutine(pathCoroutine);
+        }
+
+        public override void Execution()
+        {
+            base.Execution();
+
+            //check every ball in scene with speed at 0
+            foreach(Ball ball in Object.FindObjectsOfType<Ball>())
+            {
+                if(ball.Speed <= 0)
+                {
+                    //get its waypoint (check both player and enemy area), and be sure is an enemy waypoint
+                    Waypoint ballWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, ball.transform.position, false);
+                    if (ballWaypoint.IsPlayerWaypoint)
+                        continue;
+
+                    //try create path (only enemy area)
+                    List<Waypoint> ballPath = Pathfinding.FindPath(character, moveDiagonal, lastWaypoint, ballWaypoint);
+
+                    //if there is a path, change state to reach the ball
+                    if(ballPath != null && ballPath.Count > 0)
+                    {
+                        stateMachine.SetState(new MoveToBallEnemyState(stateMachine, timerMovement, moveDiagonal, ball));
+                        break;
+                    }
+                }
+            }
         }
 
         IEnumerator GetRandomPath()
