@@ -61,17 +61,11 @@
                 //remove every child
                 foreach (Transform child in transform)
                 {
-                    if (UnityEditor.EditorApplication.isPlaying)
-                    {
-                        Destroy(child.gameObject);
-                    }
-                    else
-                    {
-                        UnityEditor.EditorApplication.delayCall += () =>
-                        {
-                            DestroyImmediate(child.gameObject);
-                        };
-                    }
+#if UNITY_EDITOR
+                    UnityEditor.EditorApplication.delayCall += () => DestroyImmediate(child.gameObject);
+#else
+                    Destroy(child.gameObject);
+#endif
                 }
 
                 //reset list
