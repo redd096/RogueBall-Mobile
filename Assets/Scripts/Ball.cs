@@ -6,6 +6,9 @@
     [AddComponentMenu("RogueBall/Ball")]
     public class Ball : MonoBehaviour
     {
+        [Header("Important")]
+        [SerializeField] float minSpeedToDamage = 0.2f;
+
         [Header("Speed Decrease")]
         [Tooltip("Every fixed update, decrease speed")] [SerializeField] float speedDecreaseAtSecond = 0.1f;
         [Tooltip("Every time hit something and bounce, decrease speed")] [SerializeField] float speedDecreaseAtBounce = 0.5f;
@@ -17,17 +20,10 @@
         Vector2 direction;
         Coroutine movementCoroutine;
 
-        //damage
-        float damage;
-
-        //owner
-        Character owner;
-        bool ownerCanBeHitted;
-
-        public float Speed => speed;
-        public float Damage => damage;
-        public Character Owner => owner;
-        public bool Bounced => !ownerCanBeHitted;    //owner can be hitted start false, then became true on first bounce
+        public bool Stopped => rb.velocity.magnitude <= 0;
+        public float Damage { get; private set; }
+        public Character Owner { get; private set; }
+        public bool Bounced { get; private set; }
 
         #region test throw by inspector
 
@@ -87,30 +83,29 @@
             //bounce
             direction = Vector2.Reflect(direction, collision.GetContact(0).normal);
 
-            ownerCanBeHitted = true;
+            Bounced = true;
         }
 
         public bool CanHit(Character hit)
         {
-            //check if can hit owner (when owner throw ball doesn't have to repick immediatly)
-            return hit != Owner || ownerCanBeHitted;
+            //check if can hit owner (when owner throw ball doesn't have to repick immediatly, so wait first bounce)
+            return hit != Owner || Bounced;
         }
 
         public bool CanDamage(Character hit)
         {
             //check speed (so can damage) and didn't hit owner
-            return hit != Owner && speed > 0;
+            return hit != Owner && rb.velocity.magnitude > minSpeedToDamage;
         }
 
-        public void Throw(float speed, Vector2 direction, float damage, Character owner)
+        public void Throw(float force, Vector2 direction, float damage, Character owner)
         {
-            //throw values
-            this.speed = speed;
+            speed = force;
             this.direction = direction;
-            this.damage = damage;
-            this.owner = owner;
+            Damage = damage;
+            Owner = owner;
 
-            ownerCanBeHitted = false;
+            Bounced = false;
 
             //start movement coroutine
             if (movementCoroutine != null)

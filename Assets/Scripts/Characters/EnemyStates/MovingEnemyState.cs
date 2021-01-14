@@ -10,6 +10,7 @@
     {
         [Tooltip("Timer between one moves and another")] [SerializeField] float timerMovement = 1;
         [Tooltip("Can enemy move in diagonal or only horizontal and vertical?")] [SerializeField] bool moveDiagonal = false;
+        [SerializeField] bool goToBallOnlyWhenStopped = true;
 
         Character character;
         Coroutine pathCoroutine;
@@ -45,10 +46,10 @@
         {
             base.Execution();
 
-            //check every ball in scene with speed at 0
-            foreach(Ball ball in Object.FindObjectsOfType<Ball>())
+            //check every ball in scene that are stopped or (goToBallOnlyWhenStopped == false && can damage == false)
+            foreach (Ball ball in Object.FindObjectsOfType<Ball>())
             {
-                if(ball.Speed <= 0)
+                if(ball.Stopped || (goToBallOnlyWhenStopped == false && ball.CanDamage(character) == false))
                 {
                     //get its waypoint (check both player and enemy area), and be sure is an enemy waypoint
                     Waypoint ballWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, ball.transform.position, false);
