@@ -1,6 +1,7 @@
 ﻿namespace RogueBall
 {
     using UnityEngine;
+    using redd096;
 
     [AddComponentMenu("RogueBall/Characters/Components/Parry/Area Parry")]
     public class AreaParry : BaseParry
@@ -13,20 +14,23 @@
         Vector2 waypointPosition;
         Vector2 currentPosition;
 
-        protected override bool CheckParry(Waypoint currentWaypoint)
+        protected override bool CheckParry(Ball ball)
         {
+            //get current waypoint
+            Waypoint currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, ball.transform.position);
+
             //if can parry (start or end waypoint)
             if ((currentWaypoint == startWaypoint && parryOnStartWaypoint)
                 || (currentWaypoint == endWaypoint && parryOnEndWaypoint))
             {
                 //draw line and distance for debug
                 waypointPosition = currentWaypoint.transform.position;
-                currentPosition = transform.position;
+                currentPosition = ball.transform.position;
                 debugLine = true;
-                Debug.Log("distance: " + Vector2.Distance(currentWaypoint.transform.position, transform.position));
+                Debug.Log("distance: " + Vector2.Distance(currentWaypoint.transform.position, ball.transform.position));
 
                 //check distance
-                if (Vector2.Distance(currentWaypoint.transform.position, transform.position) <= currentWaypoint.AreaParry)
+                if (Vector2.Distance(currentWaypoint.transform.position, ball.transform.position) <= currentWaypoint.AreaParry)
                 {
                     return true;
                 }

@@ -18,7 +18,7 @@
             timer = Time.time + timerParry;
         }
 
-        protected override bool CheckParry(Waypoint currentWaypoint)
+        protected override bool CheckParry(Ball ball)
         {
             //if timer is not ended, parry
             if (Time.time < timer)
