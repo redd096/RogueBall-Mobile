@@ -55,17 +55,14 @@
                 //check if can parry also after bounce, or if ball didn't bounce
                 if (parryOnlyBeforeBounce == false || ball.Bounced == false)
                 {
-                    //get current waypoint
-                    Waypoint currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, transform.position);
-
                     //check parry
-                    return CheckParry(currentWaypoint);
+                    return CheckParry(ball);
                 }
             }
 
             return false;
         }
 
-        protected abstract bool CheckParry(Waypoint currentWaypoint);
+        protected abstract bool CheckParry(Ball ball);
     }
 }
