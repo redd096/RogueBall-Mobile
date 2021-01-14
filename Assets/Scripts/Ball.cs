@@ -20,7 +20,7 @@
         Vector2 direction;
         Coroutine movementCoroutine;
 
-        public bool Stopped => rb.velocity.magnitude <= 0;
+        public bool Stopped => speed <= 0;
         public float Damage { get; private set; }
         public Character Owner { get; private set; }
         public bool Bounced { get; private set; }
@@ -95,7 +95,7 @@
         public bool CanDamage(Character hit)
         {
             //check speed (so can damage) and didn't hit owner
-            return hit != Owner && rb.velocity.magnitude > minSpeedToDamage;
+            return hit != Owner && speed > minSpeedToDamage;
         }
 
         public void Throw(float force, Vector2 direction, float damage, Character owner)
