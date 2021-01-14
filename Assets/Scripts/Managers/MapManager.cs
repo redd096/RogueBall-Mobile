@@ -7,9 +7,6 @@
     [AddComponentMenu("RogueBall/Managers/Map Manager")]
     public class MapManager : MonoBehaviour
     {
-        [Header("Refresh")]
-        [SerializeField] bool refresh = false;
-
         [Header("Map")]
         [SerializeField] Waypoint[] waypoints = default;
 
@@ -21,17 +18,7 @@
             RefreshWaypoints();
         }
 
-        void OnValidate()
-        {
-            //refresh by inspector
-            if (refresh)
-            {
-                refresh = false;
-                RefreshWaypoints();
-            }
-        }
-
-        void RefreshWaypoints()
+        public void RefreshWaypoints()
         {
             //order on y then x
             Waypoint[] waypointsByOrder = waypoints.OrderBy(waypoint => Mathf.RoundToInt(waypoint.transform.position.y)).ThenBy(waypoint => Mathf.RoundToInt(waypoint.transform.position.x)).ToArray();

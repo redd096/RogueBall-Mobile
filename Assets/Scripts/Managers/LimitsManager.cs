@@ -7,9 +7,6 @@
     [AddComponentMenu("RogueBall/Managers/Limits Manager")]
     public class LimitsManager : MonoBehaviour
     {
-        [Header("Regen")]
-        [SerializeField] bool regen = false;
-
         [Header("Walls")]
         [SerializeField] List<Transform> walls = new List<Transform>();
 
@@ -17,21 +14,6 @@
 
         float width;
         float height;
-
-        void OnValidate()
-        {
-            //create and set walls
-            if(regen)
-            {
-                regen = false;
-
-                cam = Camera.main;
-                walls.Clear();      //force recreate limits
-
-                CreateLimits();
-                SetLimits();
-            }
-        }
 
         void Start()
         {
@@ -51,6 +33,15 @@
 
                 SetLimits();
             }
+        }
+
+        public void RegenLimits()
+        {
+            cam = Camera.main;
+            walls.Clear();      //force recreate limits
+
+            CreateLimits();
+            SetLimits();
         }
 
         void CreateLimits()
