@@ -9,18 +9,9 @@
         [Header("Important")]
         [SerializeField] float minSpeedToDamage = 0.2f;
 
-        [Header("Speed Decrease")]
-        [Tooltip("Every fixed update, decrease speed")] [SerializeField] float speedDecreaseAtSecond = 0.1f;
-        [Tooltip("Every time hit something and bounce, decrease speed")] [SerializeField] float speedDecreaseAtBounce = 0.5f;
-
         Rigidbody2D rb;
 
-        //movement
-        float speed;
-        Vector2 direction;
-        Coroutine movementCoroutine;
-
-        public bool Stopped => speed <= 0;
+        public bool Stopped => rb.velocity.magnitude <= 0;
         public float Damage { get; private set; }
         public Character Owner { get; private set; }
         public bool Bounced { get; private set; }
@@ -77,12 +68,6 @@
 
         void OnCollisionEnter2D(Collision2D collision)
         {
-            //decrease speed at bounce
-            speed -= speedDecreaseAtBounce;
-
-            //bounce
-            direction = Vector2.Reflect(direction, collision.GetContact(0).normal);
-
             Bounced = true;
         }
 
@@ -95,40 +80,18 @@
         public bool CanDamage(Character hit)
         {
             //check speed (so can damage) and didn't hit owner
-            return hit != Owner && speed > minSpeedToDamage;
+            return hit != Owner && rb.velocity.magnitude > minSpeedToDamage;
         }
 
         public void Throw(float force, Vector2 direction, float damage, Character owner)
         {
-            speed = force;
-            this.direction = direction;
             Damage = damage;
             Owner = owner;
 
             Bounced = false;
 
-            //start movement coroutine
-            if (movementCoroutine != null)
-                StopCoroutine(movementCoroutine);
-
-            movementCoroutine = StartCoroutine(MovementCoroutine());
-        }
-
-        IEnumerator MovementCoroutine()
-        {
-            while (true)
-            {
-                //do in fixed update
-                yield return new WaitForFixedUpdate();
-
-                //if stopped movement, stop coroutine
-                if (speed <= 0)
-                    yield break;
-
-                //move rigidbody then decrease speed
-                rb.velocity = direction * speed;
-                speed -= speedDecreaseAtSecond * Time.fixedDeltaTime;
-            }
+            //add force
+            rb.AddForce(direction * force, ForceMode2D.Impulse);
         }
     }
 }
