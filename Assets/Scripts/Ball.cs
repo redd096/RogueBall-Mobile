@@ -27,6 +27,7 @@
         public float Speed => speed;
         public float Damage => damage;
         public Character Owner => owner;
+        public bool Bounced => !ownerCanBeHitted;    //owner can be hitted start false, then became true on first bounce
 
         #region test throw by inspector
 

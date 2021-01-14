@@ -129,7 +129,7 @@
         void GetDamage(Ball ball)
         {
             //try parry
-            if (TryParry())
+            if (TryParry(ball))
             {
                 ball.Owner.GetParryDamage();
                 return;
@@ -202,9 +202,9 @@
         /// <summary>
         /// from get damage to component
         /// </summary>
-        bool TryParry()
+        bool TryParry(Ball ball)
         {
-            return CurrentParry && CurrentParry.TryParry();
+            return CurrentParry && CurrentParry.TryParry(ball);
         }
 
         #endregion

@@ -5,6 +5,9 @@
 
     public abstract class BaseParry : MonoBehaviour
     {
+        [Header("Parry Base")]
+        [SerializeField] bool parryOnlyBeforeBounce = true;
+
         protected Character character;
 
         protected bool isMoving;
@@ -45,15 +48,19 @@
             isMoving = false;
         }
 
-        public bool TryParry()
+        public bool TryParry(Ball ball)
         {
             if (isMoving)
             {
-                //get current waypoint
-                Waypoint currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, transform.position);
+                //check if can parry also after bounce, or if ball didn't bounce
+                if (parryOnlyBeforeBounce == false || ball.Bounced == false)
+                {
+                    //get current waypoint
+                    Waypoint currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, transform.position);
 
-                //check parry
-                return CheckParry(currentWaypoint);
+                    //check parry
+                    return CheckParry(currentWaypoint);
+                }
             }
 
             return false;
