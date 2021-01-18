@@ -33,7 +33,7 @@
         {
             //start swipe
             character.onMove?.Invoke(CurrentWaypoint, targetWaypoint);
-            SetAnimator(targetWaypoint.transform.position - CurrentWaypoint.transform.position, true);
+            SetAnimator(CurrentWaypoint, targetWaypoint, true);
 
             //move to new waypoint
             float delta = 0;
@@ -45,12 +45,12 @@
                 yield return null;
             }
 
-            SetAnimator(targetWaypoint.transform.position - CurrentWaypoint.transform.position, false);
+            SetAnimator(CurrentWaypoint, targetWaypoint, false);
 
             //wait before come back
             yield return new WaitForSeconds(timeBeforeComeBack);
 
-            SetAnimator(CurrentWaypoint.transform.position - targetWaypoint.transform.position, true);
+            SetAnimator(targetWaypoint, CurrentWaypoint, true);
 
             //come back to position
             delta = 0;
@@ -64,7 +64,7 @@
 
             //end swipe
             character.onEndMove?.Invoke();
-            SetAnimator(CurrentWaypoint.transform.position - targetWaypoint.transform.position, false);
+            SetAnimator(targetWaypoint, CurrentWaypoint, false);
 
             movementCoroutine = null;
         }

@@ -45,10 +45,18 @@
             }
         }
 
-        protected void SetAnimator(Vector2 direction, bool move)
+        protected void SetAnimator(Waypoint startWaypoint, Waypoint endWaypoint, bool move)
         {
-            anim?.SetFloat("Horizontal", direction.x);
-            anim?.SetFloat("Vertical", direction.y);
+            //if move, set direction
+            if (move)
+            {
+                Vector2Int direction = endWaypoint.PositionInMap - startWaypoint.PositionInMap;
+
+                anim?.SetFloat("Horizontal", direction.x);
+                anim?.SetFloat("Vertical", direction.y);
+            }
+
+            //set if move
             anim?.SetBool("Move", move);
         }
 

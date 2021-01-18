@@ -30,7 +30,7 @@
         {
             //start swipe
             character.onMove?.Invoke(CurrentWaypoint, targetWaypoint);
-            SetAnimator(targetWaypoint.transform.position - CurrentWaypoint.transform.position, true);
+            SetAnimator(CurrentWaypoint, targetWaypoint, true);
 
             //move to new waypoint
             float delta = 0;
@@ -48,7 +48,7 @@
 
             //end swipe
             character.onEndMove?.Invoke();
-            SetAnimator(targetWaypoint.transform.position - CurrentWaypoint.transform.position, false);
+            SetAnimator(CurrentWaypoint, targetWaypoint, false);
 
             movementCoroutine = null;
         }
