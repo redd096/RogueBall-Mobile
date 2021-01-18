@@ -2,6 +2,7 @@
 {
     using System.Collections;
     using UnityEngine;
+    using redd096;
 
     [AddComponentMenu("RogueBall/Ball")]
     public class Ball : MonoBehaviour
@@ -11,6 +12,9 @@
         [Header("Important")]
         [SerializeField] float minSpeedToDamage = 0.2f;
 
+        [Header("Anchor to Waypoint")]
+        [SerializeField] float maxDistanceFromCenter = 0.1f;
+
         [Header("Use for debug (0 = no use)")]
         [SerializeField] float timerBeforeCanRepickBall = 1;
 
@@ -19,6 +23,14 @@
         Character owner;
         bool bounced;
         float timerAfterCanHitOwner;
+
+        #region to anchor at waypoint
+
+        bool waitBounce;
+        Vector2 lastVelocity;
+        bool bouncedToAnchorPoint;
+
+        #endregion
 
         public bool IsSlow => rb.velocity.magnitude <= minSpeedToDamage;
         public bool ReallyStopped => rb.velocity.magnitude <= 0;
@@ -81,6 +93,50 @@
         void OnCollisionEnter2D(Collision2D collision)
         {
             bounced = true;
+
+            //used for anchor point, wait bounce
+            if(waitBounce)
+            {
+                bouncedToAnchorPoint = true;
+            }
+        }
+
+        private void FixedUpdate()
+        {
+            Waypoint currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(null, transform.position, false);
+
+            //if slow
+            if(IsSlow)
+            {
+                //if too much distant from waypoint
+                if (Vector3.Distance(transform.position, currentWaypoint.transform.position) > maxDistanceFromCenter)
+                {
+                    waitBounce = true;
+
+                    //wait bounce
+                    if (bouncedToAnchorPoint == false)
+                    {
+                        rb.velocity = lastVelocity;
+                    }
+                    //then redirect to waypoint
+                    else
+                    {
+                        Vector3 directionToWaypoint = (currentWaypoint.transform.position - transform.position).normalized;
+
+                        rb.velocity = directionToWaypoint * lastVelocity.magnitude;
+                    }
+                }
+                //else stop movement
+                else
+                {
+                    rb.velocity = Vector2.zero;
+                }
+            }
+            //if no slow, save last velocity
+            else
+            {
+                lastVelocity = rb.velocity;
+            }
         }
 
         public bool CanHit(Character hit)
@@ -101,8 +157,13 @@
             this.damage = damage;
             this.owner = owner;
 
+            //set no bounce
             bounced = false;
-            timerAfterCanHitOwner = Time.time + timerBeforeCanRepickBall;
+            timerAfterCanHitOwner = Time.time + timerBeforeCanRepickBall;   //for debug
+
+            //reset things for anchor point
+            waitBounce = false;
+            bouncedToAnchorPoint = false;
 
             //add force
             rb.AddForce(direction * force, ForceMode2D.Impulse);
