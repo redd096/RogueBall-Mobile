@@ -13,11 +13,11 @@
         [Header("Area Parry")]
         [Tooltip("Area used for AreaParry")] [SerializeField] float areaParry = 0.3f;
 
-        public Vector2Int PositionInMap { get; set; }
-
         public bool IsActive => isActive;
         public bool IsPlayerWaypoint => isPlayerWaypoint;
         public float AreaParry => areaParry;
+
+        public Vector2Int PositionInMap { get; set; }
 
         Coroutine reactiveCoroutine;
 

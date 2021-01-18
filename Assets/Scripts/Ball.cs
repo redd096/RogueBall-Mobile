@@ -6,15 +6,27 @@
     [AddComponentMenu("RogueBall/Ball")]
     public class Ball : MonoBehaviour
     {
+        #region variables
+
         [Header("Important")]
         [SerializeField] float minSpeedToDamage = 0.2f;
 
-        Rigidbody2D rb;
+        [Header("Use for debug (0 = no use)")]
+        [SerializeField] float timerBeforeCanRepickBall = 1;
 
-        public bool Stopped => rb.velocity.magnitude <= 0;
-        public float Damage { get; private set; }
-        public Character Owner { get; private set; }
-        public bool Bounced { get; private set; }
+        Rigidbody2D rb;
+        float damage;
+        Character owner;
+        bool bounced;
+        float timerAfterCanHitOwner;
+
+        public bool IsSlow => rb.velocity.magnitude <= minSpeedToDamage;
+        public bool ReallyStopped => rb.velocity.magnitude <= 0;
+        public float Damage => damage;
+        public Character Owner => owner;
+        public bool Bounced => bounced;
+
+        #endregion
 
         #region test throw by inspector
 
@@ -68,27 +80,29 @@
 
         void OnCollisionEnter2D(Collision2D collision)
         {
-            Bounced = true;
+            bounced = true;
         }
 
         public bool CanHit(Character hit)
         {
-            //check if can hit owner (when owner throw ball doesn't have to repick immediatly, so wait first bounce)
-            return hit != Owner || Bounced;
+            return hit != owner                                                             //or hit somebody different from owner
+                || bounced                                                                  //or can hit owner after bounce
+                || (timerBeforeCanRepickBall > 0 && Time.time > timerAfterCanHitOwner);     //or after a few seconds (just for debug, if enemy throw ball too slow)
         }
 
         public bool CanDamage(Character hit)
         {
-            //check speed (so can damage) and didn't hit owner
-            return hit != Owner && rb.velocity.magnitude > minSpeedToDamage;
+            //check didn't hit owner and ball is not slow
+            return hit != owner && IsSlow == false;
         }
 
         public void Throw(float force, Vector2 direction, float damage, Character owner)
         {
-            Damage = damage;
-            Owner = owner;
+            this.damage = damage;
+            this.owner = owner;
 
-            Bounced = false;
+            bounced = false;
+            timerAfterCanHitOwner = Time.time + timerBeforeCanRepickBall;
 
             //add force
             rb.AddForce(direction * force, ForceMode2D.Impulse);
