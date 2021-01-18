@@ -137,7 +137,7 @@
             {
                 //if waypoint is not current waypoint and is active
                 if(waypoint != currentWaypoint && waypoint.IsActive
-                    && waypoint.IsPlayerWaypoint == isPlayer)                                               //is playerWaypoint for a player, or enemyWaypoint for enemy
+                    && waypoint.IsPlayerWaypoint == isPlayer)                                           //is playerWaypoint for a player, or enemyWaypoint for enemy
                 {
                     possibleWaypoints.Add(waypoint);
                 }

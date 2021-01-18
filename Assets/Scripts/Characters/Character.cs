@@ -180,7 +180,11 @@
         /// </summary>
         public virtual bool ThrowBall(Vector2 direction)
         {
-            return CurrentThrowBall && CurrentThrowBall.Throw(currentBall, direction);
+            //remove ball
+            Ball ball = currentBall;
+            currentBall = null;
+
+            return CurrentThrowBall && CurrentThrowBall.Throw(ball, direction);
         }
 
         /// <summary>
