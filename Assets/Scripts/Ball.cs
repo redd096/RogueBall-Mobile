@@ -18,6 +18,7 @@
 
         [Header("Use for debug (0 = no use)")]
         [SerializeField] float timerBeforeCanRepickBall = 1;
+        [SerializeField] bool showSpeed = false;
 
         Rigidbody2D rb;
         float damage;
@@ -106,7 +107,8 @@
         {
             Waypoint currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(null, transform.position, false);
 
-            Debug.Log("ball speed: " + rb.velocity.magnitude);
+            if(showSpeed)
+                Debug.Log("ball speed: " + rb.velocity.magnitude);
 
             //if slow
             if(IsSlow)
