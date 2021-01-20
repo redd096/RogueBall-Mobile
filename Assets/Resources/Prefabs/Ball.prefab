@@ -144,7 +144,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 0.5
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 6200000, guid: eb67c1d67dc9cd84a990fc01868a49a3, type: 2}
@@ -164,7 +164,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95f9dbcc0f3d43246aa43f04e698599b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSpeedToDamage: 0.2
+  minSpeedToDamage: 1
+  damageOnlyBeforeBounce: 1
+  maxDistanceFromCenter: 0.1
+  timerBeforeCanRepickBall: 1
+  showSpeed: 0
   throwBall: 0
   speedThrow: 3
   damageThrow: 100

@@ -70,6 +70,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  parryDamage: 100
   movingState:
     moveDiagonal: 0
     timeToRelease: 1
@@ -102,6 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf5ba4315a923384cb4fda128a695089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parryOnlyBeforeBounce: 1
   parryOnStartWaypoint: 1
   parryOnEndWaypoint: 1
 --- !u!114 &2818697022086744309
@@ -116,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6a7517f33344344cb17803c181ddf10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  force: 3
+  force: 7
   damage: 100
 --- !u!1 &4271105776835213519
 GameObject:
