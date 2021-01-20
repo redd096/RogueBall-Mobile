@@ -61,7 +61,7 @@
         Vector2 GetDirection()
         {
             //aim at player or random
-            if (aimAtPlayer)
+            if (aimAtPlayer && GameManager.instance.player)
             {
                 return (GameManager.instance.player.transform.position - stateMachine.transform.position).normalized;
             }

@@ -207,7 +207,7 @@
         /// <summary>
         /// from get damage to component
         /// </summary>
-        bool TryParry(Ball ball)
+        protected virtual bool TryParry(Ball ball)
         {
             return CurrentParry && CurrentParry.TryParry(ball);
         }

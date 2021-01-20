@@ -5,6 +5,9 @@
 
     public abstract class BaseMovement : MonoBehaviour
     {
+        public bool IsMoving => movementCoroutine != null;
+        protected Coroutine movementCoroutine;
+
         protected Character character;
         Animator anim;
 

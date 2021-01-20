@@ -2,7 +2,6 @@
 {
     using System.Collections;
     using UnityEngine;
-    using redd096;
 
     [AddComponentMenu("RogueBall/Characters/Components/Movement/Arcade Movement")]
     public class ArcadeMovement : BaseMovement
@@ -11,8 +10,6 @@
         [Tooltip("Duration movement from one waypoint to another")] [SerializeField] float timeMovement = 0.3f;
         [Tooltip("Time to stay in new waypoint before come back to start waypoint")] [SerializeField] float timeBeforeComeBack = 0.1f;
         [Tooltip("Duration movement to come back to start waypoint")] [SerializeField] float timeComeBack = 0.3f;
-
-        Coroutine movementCoroutine;
 
         public override bool Move(Waypoint targetWaypoint, bool moveDiagonal)
         {

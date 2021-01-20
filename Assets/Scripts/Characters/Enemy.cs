@@ -64,6 +64,17 @@
             Destroy(gameObject);
         }
 
+        protected override bool TryParry(Ball ball)
+        {
+            //do parry every time is moving (only if there is parry component)
+            if(CurrentMovement && CurrentMovement.IsMoving)
+            {
+                return CurrentParry;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// called from state when there is a problem to reach a ball
         /// </summary>
