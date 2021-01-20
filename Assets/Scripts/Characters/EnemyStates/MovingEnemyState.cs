@@ -46,10 +46,10 @@
         {
             base.Execution();
 
-            //check every ball in scene that is really stopped (or just is slow and don't do damage)
+            //check every ball in scene that is really stopped (or just don't do damage - use false on checkOwner, so can't repick self throwed balls before they slow down)
             foreach (Ball ball in Object.FindObjectsOfType<Ball>())
             {
-                if(ball.ReallyStopped || (goToBallOnlyWhenStopped == false && ball.IsSlow))
+                if(ball.ReallyStopped || (goToBallOnlyWhenStopped == false && ball.CanDamage(character) == false))
                 {
                     //get its waypoint (check both player and enemy area), and be sure is an enemy waypoint
                     Waypoint ballWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, ball.transform.position, false);

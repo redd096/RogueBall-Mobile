@@ -11,6 +11,7 @@
 
         [Header("Important")]
         [SerializeField] float minSpeedToDamage = 0.2f;
+        [SerializeField] bool damageOnlyBeforeBounce = true;
 
         [Header("Anchor to Waypoint")]
         [SerializeField] float maxDistanceFromCenter = 0.1f;
@@ -150,8 +151,10 @@
 
         public bool CanDamage(Character hit)
         {
-            //check didn't hit owner and ball is not slow
-            return hit != owner && IsSlow == false;
+            //check didn't hit owner 
+            return owner != null && hit != owner 
+                && ( (damageOnlyBeforeBounce == false && IsSlow == false)   //and ball is not slow (if can damage also after bounce)
+                || (damageOnlyBeforeBounce && bounced == false) );          //or ball didn't bounced (if can NOT damage after bounce)
         }
 
         public void Throw(float force, Vector2 direction, float damage, Character owner)
