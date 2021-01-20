@@ -108,7 +108,7 @@
             Waypoint currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(null, transform.position, false);
 
             if(showSpeed)
-                Debug.Log("ball speed: " + rb.velocity.magnitude);
+                Debug.Log("ball speed: " + rb.velocity.magnitude.ToString("F2"));
 
             //if slow
             if(IsSlow)
