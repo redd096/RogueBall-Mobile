@@ -33,7 +33,8 @@
                 z = redd096.Utility.Remap(direction.x, -1, 1, 90, 270);
             }
 
-            arrow.localEulerAngles = new Vector3(0, 0, z);
+            if(arrow)
+                arrow.localEulerAngles = new Vector3(0, 0, z);
         }
 
         void Start()
