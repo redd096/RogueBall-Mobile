@@ -36,7 +36,7 @@
             //disable movement and parry
             //SetState(null);
 
-            Debug.Log("dead");
+            Destroy(gameObject);
         }
     }
 }

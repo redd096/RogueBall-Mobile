@@ -4,7 +4,7 @@
     using UnityEngine;
     using redd096;
 
-    [AddComponentMenu("RogueBall/Ball")]
+    [AddComponentMenu("RogueBall/Balls/Ball")]
     public class Ball : MonoBehaviour
     {
         #region variables
