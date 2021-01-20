@@ -8,12 +8,14 @@
     {
         public MapManager mapManager { get; private set; }
         public Player player { get; private set; }
+        public UIManager uiManager { get; private set; }
 
         protected override void SetDefaults()
         {
             //get references
             mapManager = FindObjectOfType<MapManager>();
             player = FindObjectOfType<Player>();
+            uiManager = FindObjectOfType<UIManager>();
         }
     }
 }

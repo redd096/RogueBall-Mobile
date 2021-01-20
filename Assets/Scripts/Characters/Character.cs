@@ -131,6 +131,7 @@
             //try parry
             if (TryParry(ball))
             {
+                GameManager.instance.uiManager.ActiveParryUI();
                 ball.Owner.GetParryDamage();
                 return;
             }
