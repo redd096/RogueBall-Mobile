@@ -8,6 +8,7 @@
         [Header("Throw")]
         [Tooltip("Force throw")] [SerializeField] float force = 3;
         [SerializeField] float damage = 100;
+        [SerializeField] bool isParryable = true;
 
         public override bool Throw(Ball ball, Vector2 direction)
         {
@@ -18,7 +19,7 @@
                 ball.gameObject.SetActive(true);
 
                 //throw ball
-                ball.Throw(force, direction, damage, character);
+                ball.Throw(force, direction, damage, character, isParryable);
 
                 return true;
             }

@@ -23,6 +23,7 @@
         Rigidbody2D rb;
         float damage;
         Character owner;
+        bool isParryable;
         bool bounced;
         float timerAfterCanHitOwner;
 
@@ -38,6 +39,7 @@
         public bool ReallyStopped => rb.velocity.magnitude <= 0;
         public float Damage => damage;
         public Character Owner => owner;
+        public bool IsParryable => isParryable;
         public bool Bounced => bounced;
 
         #endregion
@@ -82,7 +84,7 @@
 
             //remove text and throw
             timerText.gameObject.SetActive(false);
-            Throw(speedThrow, transform.up, damageThrow, null);
+            Throw(speedThrow, transform.up, damageThrow, null, true);
         }
 
         #endregion
@@ -159,10 +161,11 @@
                 || (damageOnlyBeforeBounce && bounced == false) );          //or ball didn't bounced (if can NOT damage after bounce)
         }
 
-        public void Throw(float force, Vector2 direction, float damage, Character owner)
+        public void Throw(float force, Vector2 direction, float damage, Character owner, bool isParryable)
         {
             this.damage = damage;
             this.owner = owner;
+            this.isParryable = isParryable;
 
             //set no bounce
             bounced = false;

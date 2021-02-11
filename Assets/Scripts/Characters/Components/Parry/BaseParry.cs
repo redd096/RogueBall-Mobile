@@ -50,7 +50,8 @@
 
         public bool TryParry(Ball ball)
         {
-            if (isMoving)
+            //if in movement to parry, and ball is parryable
+            if (isMoving && ball.IsParryable)
             {
                 //check if can parry also after bounce, or if ball didn't bounce
                 if (parryOnlyBeforeBounce == false || ball.Bounced == false)
