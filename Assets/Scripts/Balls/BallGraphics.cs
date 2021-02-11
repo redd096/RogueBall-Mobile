@@ -10,17 +10,21 @@
         [Header("In Parry Area")]
         [SerializeField] Color colorInParryArea = Color.cyan;
 
+        [Header("Not Parryable")]
+        [SerializeField] Color colorNotParryable = Color.red;
+
         Ball ball;
 
         Dictionary<Renderer, Color> normalColors = new Dictionary<Renderer, Color>();
         bool inParryArea;
+        bool coloredNotParryable;
 
         void Awake()
         {
             ball = GetComponent<Ball>();
 
             //set normal colors
-            foreach(Renderer r in GetComponentsInChildren<Renderer>())
+            foreach (Renderer r in GetComponentsInChildren<Renderer>())
             {
                 normalColors.Add(r, r.material.color);
             }
@@ -28,17 +32,41 @@
 
         void Update()
         {
+            CheckIsParryable();
+            UpdateParryArea();
+        }
+
+        void CheckIsParryable()
+        {
+            //if ball not parryable, color it
+            if (ball.IsParryable == false && coloredNotParryable == false)
+            {
+                ColorBall(colorNotParryable);
+                coloredNotParryable = true;
+            }
+            //else back to normal color
+            else if (ball.IsParryable && coloredNotParryable)
+            {
+                SetNormalColor();
+                coloredNotParryable = false;
+            }
+        }
+
+        void UpdateParryArea()
+        {
             //find current waypoint
             Waypoint currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(null, transform.position, false);
 
             //if inside area parry, color it
             if (Vector2.Distance(currentWaypoint.transform.position, transform.position) <= currentWaypoint.AreaParry)
             {
-                //only if is parryable
-                if (ball.IsParryable && inParryArea == false)
+                if (inParryArea == false)
                 {
-                    ColorInParryArea();
                     inParryArea = true;
+
+                    //only if is parryable
+                    if (ball.IsParryable)
+                        ColorBall(colorInParryArea);
                 }
             }
             //else back to normal color
@@ -46,22 +74,25 @@
             {
                 if (inParryArea)
                 {
-                    NormalColorOutOfParryArea();
                     inParryArea = false;
+
+                    //only if is parryable
+                    if (ball.IsParryable)
+                        SetNormalColor();
                 }
             }
         }
 
-        void ColorInParryArea()
+        void ColorBall(Color color)
         {
-            //set colors in parry area
+            //set color
             foreach (Renderer r in normalColors.Keys)
             {
-                r.material.color = colorInParryArea;
+                r.material.color = color;
             }
         }
 
-        void NormalColorOutOfParryArea()
+        void SetNormalColor()
         {
             //set colors to normal
             foreach (Renderer r in normalColors.Keys)

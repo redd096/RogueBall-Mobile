@@ -24,7 +24,7 @@
         Rigidbody2D rb;
         float damage;
         Character owner;
-        bool isParryable;
+        bool isParryable = true;
         bool bounced;
         float timerAfterCanHitOwner;
 
