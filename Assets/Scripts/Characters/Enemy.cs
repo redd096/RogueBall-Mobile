@@ -3,41 +3,17 @@
     using UnityEngine;
 
     [AddComponentMenu("RogueBall/Characters/Enemy")]
+    [RequireComponent(typeof(EnemyGraphics))]
     public class Enemy : Character
     {
         [Header("States")]
         [SerializeField] MovingEnemyState movingState = default;
         [SerializeField] ThrowEnemyState throwState = default;
 
-        [Header("DEBUG")]
-        [SerializeField] Transform arrow = default;
+        public System.Action<Vector2, Vector2> onSetMoveDirection;
+        public System.Action<Vector2, Vector2> onSetThrowDirection;
 
-        public void DebugArrow(Vector2 direction)
-        {
-            //0, 45, 90, 135, 180, -135 (225), -90 (270), -45 (315), 0 (360)
-            float z = 0;
-
-            if(direction.y >= Mathf.Epsilon)
-            {
-                //-1 = 45
-                //0 = 0
-                //1 = -45 (315)
-                z = redd096.Utility.Remap(direction.x, -1, 1, 90, -90);
-            }
-            else
-            {
-                //-1 = 135
-                //0 = 180
-                //1 = -135 (255)
-
-                z = redd096.Utility.Remap(direction.x, -1, 1, 90, 270);
-            }
-
-            if(arrow)
-                arrow.localEulerAngles = new Vector3(0, 0, z);
-        }
-
-        void Start()
+        protected virtual void Start()
         {
             //set start state
             SetState(movingState);

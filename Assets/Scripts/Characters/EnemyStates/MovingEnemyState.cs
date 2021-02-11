@@ -12,7 +12,7 @@
         [Tooltip("Can enemy move in diagonal or only horizontal and vertical?")] [SerializeField] bool moveDiagonal = false;
         [SerializeField] bool goToBallOnlyWhenStopped = true;
 
-        Character character;
+        Enemy enemy;
         Coroutine pathCoroutine;
 
         Waypoint lastWaypoint;
@@ -26,11 +26,11 @@
         {
             base.Enter();
 
-            character = stateMachine as Character;
+            enemy = stateMachine as Enemy;
 
             //reset path
-            lastWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, character.transform.position);
-            pathCoroutine = character.StartCoroutine(GetRandomPath());
+            lastWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(enemy, enemy.transform.position);
+            pathCoroutine = enemy.StartCoroutine(GetRandomPath());
         }
 
         public override void Exit()
@@ -39,7 +39,7 @@
 
             //be sure to stop coroutine
             if (pathCoroutine != null)
-                character.StopCoroutine(pathCoroutine);
+                enemy.StopCoroutine(pathCoroutine);
         }
 
         public override void Execution()
@@ -49,15 +49,15 @@
             //check every ball in scene that is really stopped (or just don't do damage - use false on checkOwner, so can't repick self throwed balls before they slow down)
             foreach (Ball ball in Object.FindObjectsOfType<Ball>())
             {
-                if(ball.ReallyStopped || (goToBallOnlyWhenStopped == false && ball.CanDamage(character) == false))
+                if(ball.ReallyStopped || (goToBallOnlyWhenStopped == false && ball.CanDamage(enemy) == false))
                 {
                     //get its waypoint (check both player and enemy area), and be sure is an enemy waypoint
-                    Waypoint ballWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, ball.transform.position, false);
+                    Waypoint ballWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(enemy, ball.transform.position, false);
                     if (ballWaypoint.IsPlayerWaypoint)
                         continue;
 
                     //try create path (only enemy area)
-                    List<Waypoint> ballPath = Pathfinding.FindPath(character, moveDiagonal, lastWaypoint, ballWaypoint);
+                    List<Waypoint> ballPath = Pathfinding.FindPath(enemy, moveDiagonal, lastWaypoint, ballWaypoint);
 
                     //if there is a path, change state to reach the ball
                     if(ballPath != null && ballPath.Count > 0)
@@ -74,17 +74,17 @@
             path = new List<Waypoint>();
 
             //while can't use path
-            while (path == null || path.Count <= 0 || character.CanMove(path[0], moveDiagonal) == false)
+            while (path == null || path.Count <= 0 || enemy.CanMove(path[0], moveDiagonal) == false)
             {
                 //try get path to random point
-                Waypoint randomWaypoint = GameManager.instance.mapManager.GetRandomWaypoint(character, lastWaypoint);
-                path = Pathfinding.FindPath(character, moveDiagonal, lastWaypoint, randomWaypoint);
+                Waypoint randomWaypoint = GameManager.instance.mapManager.GetRandomWaypoint(enemy, lastWaypoint);
+                path = Pathfinding.FindPath(enemy, moveDiagonal, lastWaypoint, randomWaypoint);
 
                 yield return null;
             }
 
             //start move
-            pathCoroutine = character.StartCoroutine(Move());
+            pathCoroutine = enemy.StartCoroutine(Move());
         }
 
         IEnumerator Move()
@@ -93,15 +93,14 @@
             {
                 lastWaypoint = path[0];
 
-                //DEBUG
-                Enemy enemy = stateMachine as Enemy;
-                enemy.DebugArrow((lastWaypoint.transform.position - character.transform.position).normalized);
+                //call event
+                enemy.onSetMoveDirection?.Invoke(enemy.transform.position, lastWaypoint.transform.position);
 
                 //wait
                 yield return new WaitForSeconds(timerMovement);
 
                 //if move, remove waypoint from path
-                if(character.Move(lastWaypoint, moveDiagonal))
+                if(enemy.Move(lastWaypoint, moveDiagonal))
                 {
                     path.RemoveAt(0);
                 }
@@ -109,13 +108,13 @@
                 else
                 {
                     Debug.LogWarning("Enemy can't reach waypoint");
-                    lastWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, character.transform.position);     //can't use lastWaypoint cause can't reach, than use current waypoint
+                    lastWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(enemy, enemy.transform.position);     //can't use lastWaypoint cause can't reach, than use current waypoint
                     path.Clear();
                 }
             }
 
             //get new path
-            pathCoroutine = character.StartCoroutine(GetRandomPath());
+            pathCoroutine = enemy.StartCoroutine(GetRandomPath());
         }
     }
 }

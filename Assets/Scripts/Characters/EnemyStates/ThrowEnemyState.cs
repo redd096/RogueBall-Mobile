@@ -9,7 +9,9 @@
         [Tooltip("Timer between one throw and another")] [SerializeField] float timerThrow = 1;
         [Tooltip("Aim at player or throw random?")] [SerializeField] bool aimAtPlayer = true;
 
-        Vector2 direction;
+        Enemy enemy;
+
+        Vector2 aimPoint;
         float timer;
 
         public ThrowEnemyState(StateMachine stateMachine) : base(stateMachine)
@@ -24,46 +26,48 @@
             timer = Time.time + timerThrow;
 
             //set direction to throw
-            direction = GetDirection();
+            aimPoint = GetAimPoint();
 
-            //DEBUG
-            Enemy enemy = stateMachine as Enemy;
-            enemy.DebugArrow(direction);
+            //call event
+            enemy = stateMachine as Enemy;
+            enemy.onSetThrowDirection?.Invoke(stateMachine.transform.position, aimPoint);
         }
 
         public override void Execution()
         {
             base.Execution();
 
-            //temp
+            //continue to aim at player
             if(aimAtPlayer)
             {
                 //set direction to throw
-                direction = GetDirection();
+                aimPoint = GetAimPoint();
 
-                //DEBUG
-                Enemy enemy = stateMachine as Enemy;
-                enemy.DebugArrow(direction);
+                //call event
+                enemy.onSetThrowDirection?.Invoke(stateMachine.transform.position, aimPoint);
             }
 
             //after timer, throw
             if (Time.time > timer)
             {
                 Character character = stateMachine as Character;
-                if (character.ThrowBall(direction))
+                if (character.ThrowBall((aimPoint - new Vector2(stateMachine.transform.position.x, stateMachine.transform.position.y)).normalized))
                 {
                     //update timer only if has been succesfull
                     timer = Time.time + timerThrow;
+
+                    //reset throw direction
+                    enemy.onSetThrowDirection?.Invoke(Vector2.zero, Vector2.zero);
                 }
             }
         }
 
-        Vector2 GetDirection()
+        Vector2 GetAimPoint()
         {
             //aim at player or random
             if (aimAtPlayer && GameManager.instance.player)
             {
-                return (GameManager.instance.player.transform.position - stateMachine.transform.position).normalized;
+                return GameManager.instance.player.transform.position;
             }
             else
             {
