@@ -10,6 +10,8 @@
         [SerializeField] float damage = 100;
         [SerializeField] bool isParryable = true;
 
+        public bool IsParryable => isParryable;
+
         public override bool Throw(Ball ball, Vector2 direction)
         {
             if (ball)

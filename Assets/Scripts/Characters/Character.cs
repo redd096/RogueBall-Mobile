@@ -11,7 +11,7 @@
         [SerializeField] float health = 100;
         [Tooltip("Damage when receive parry")] [SerializeField] float parryDamage = 100;
 
-        Ball currentBall;
+        protected Ball currentBall;
         bool isDead;
 
         #region events
@@ -77,8 +77,8 @@
             }
         }
 
-        BaseThrowBall currentThrowBall;
-        public BaseThrowBall CurrentThrowBall
+        ThrowBall currentThrowBall;
+        public ThrowBall CurrentThrowBall
         {
             get
             {
@@ -90,7 +90,7 @@
                 //else find first enabled
                 else
                 {
-                    foreach (BaseThrowBall throwBall in GetComponents<BaseThrowBall>())
+                    foreach (ThrowBall throwBall in GetComponents<ThrowBall>())
                     {
                         if (throwBall.enabled)
                         {
