@@ -5,6 +5,7 @@
     using redd096;
 
     [AddComponentMenu("RogueBall/Balls/Ball")]
+    [RequireComponent(typeof(BallGraphics))]
     public class Ball : MonoBehaviour
     {
         #region variables
@@ -39,7 +40,7 @@
         public bool ReallyStopped => rb.velocity.magnitude <= 0;
         public float Damage => damage;
         public Character Owner => owner;
-        public bool IsParryable => isParryable;
+        public bool IsParryable { get { return isParryable; } set { isParryable = value; } }
         public bool Bounced => bounced;
 
         #endregion

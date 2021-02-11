@@ -10,11 +10,15 @@
         [Header("In Parry Area")]
         [SerializeField] Color colorInParryArea = Color.cyan;
 
+        Ball ball;
+
         Dictionary<Renderer, Color> normalColors = new Dictionary<Renderer, Color>();
         bool inParryArea;
 
         void Awake()
         {
+            ball = GetComponent<Ball>();
+
             //set normal colors
             foreach(Renderer r in GetComponentsInChildren<Renderer>())
             {
@@ -30,7 +34,8 @@
             //if inside area parry, color it
             if (Vector2.Distance(currentWaypoint.transform.position, transform.position) <= currentWaypoint.AreaParry)
             {
-                if (inParryArea == false)
+                //only if is parryable
+                if (ball.IsParryable && inParryArea == false)
                 {
                     ColorInParryArea();
                     inParryArea = true;
