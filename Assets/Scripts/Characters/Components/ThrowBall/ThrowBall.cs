@@ -22,6 +22,7 @@
 
                 //throw ball
                 ball.Throw(force, direction, damage, character, isParryable);
+                character.onThrowBall?.Invoke();
 
                 return true;
             }

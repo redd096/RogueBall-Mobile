@@ -14,10 +14,18 @@
         protected Ball currentBall;
         bool isDead;
 
+        public float Health => health;
+
         #region events
 
         public System.Action<Waypoint, Waypoint> onMove;
         public System.Action onEndMove;
+        public System.Action onGetDamage;
+        public System.Action onDie;
+        public System.Action onParry;
+        public System.Action onGetParryDamage;
+        public System.Action onPickBall;
+        public System.Action onThrowBall;
 
         #endregion
 
@@ -133,11 +141,15 @@
             {
                 GameManager.instance.uiManager.ActiveParryUI();
                 ball.Owner.GetParryDamage();
+
+                onParry?.Invoke();
                 return;
             }
 
             //else get damage and check death
             health -= ball.Damage;
+            onGetDamage?.Invoke();
+
             if (health <= 0)
             {
                 Die();
@@ -150,6 +162,7 @@
                 return;
 
             isDead = true;
+            onDie?.Invoke();
 
             //call death function
             DeathFunction();
@@ -162,12 +175,16 @@
             //get ball and deactive it
             currentBall = ball;
             ball.gameObject.SetActive(false);
+
+            onPickBall?.Invoke();
         }
 
         public void GetParryDamage()
         {
             //else get parry damage and check death
             health -= parryDamage;
+            onGetParryDamage?.Invoke();
+
             if (health <= 0)
             {
                 Die();

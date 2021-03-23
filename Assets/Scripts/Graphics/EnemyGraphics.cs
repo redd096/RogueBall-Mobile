@@ -3,7 +3,7 @@
     using UnityEngine;
 
     [AddComponentMenu("RogueBall/Graphics/Enemy Graphics")]
-    public class EnemyGraphics : MonoBehaviour
+    public class EnemyGraphics : CharacterGraphics
     {
         [Header("Aim Throw")]
         [Tooltip("Line renderer used to show aim direction")] [SerializeField] LineRenderer aimLine = default;
@@ -13,16 +13,20 @@
 
         Enemy enemy;
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
+
             //set events
             enemy = GetComponent<Enemy>();
             enemy.onSetMoveDirection += OnSetMoveDirection;
             enemy.onSetThrowDirection += OnSetThrowDirection;
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
+
             //remove events
             if(enemy)
             {

@@ -4,25 +4,41 @@
     using UnityEngine;
     using redd096;
 
-    [AddComponentMenu("RogueBall/Balls/Ball Graphics")]
+    [AddComponentMenu("RogueBall/Graphics/Ball Graphics")]
     public class BallGraphics : MonoBehaviour
     {
+        Ball ball;
+
+        #region events vars
+
+        [Header("On Bounce")]
+        [SerializeField] ParticleSystem[] particlesOnBounce = default;
+        [SerializeField] AudioStruct[] soundOnBounce = default;
+        [SerializeField] bool vibrateOnBounce = false;
+
+        [Header("On Throwed")]
+        [SerializeField] ParticleSystem[] particlesOnThrowed = default;
+        [SerializeField] AudioStruct[] soundOnThrowed = default;
+        [SerializeField] bool vibrateOnThrowed = false;
+
+        #endregion
+
+        #region parry vars
+
         [Header("In Parry Area")]
         [SerializeField] Color colorInParryArea = Color.cyan;
 
         [Header("Not Parryable")]
         [SerializeField] Color colorNotParryable = Color.red;
 
-        Ball ball;
-
         Dictionary<Renderer, Color> normalColors = new Dictionary<Renderer, Color>();
         bool inParryArea;
         bool coloredNotParryable;
 
+        #endregion
+
         void Awake()
         {
-            ball = GetComponent<Ball>();
-
             //set normal colors
             foreach (Renderer r in GetComponentsInChildren<Renderer>())
             {
@@ -30,11 +46,33 @@
             }
         }
 
+        void OnEnable()
+        {
+            ball = GetComponent<Ball>();
+
+            //add events
+            ball.onBounce += OnBounce;
+            ball.onThrowed += OnThrowed;
+        }
+
+        void OnDisable()
+        {
+            //remove events
+            if(ball)
+            {
+                ball.onBounce -= OnBounce;
+                ball.onThrowed -= OnThrowed;
+            }
+        }
+
         void Update()
         {
+            //parry checks
             CheckIsParryable();
             UpdateParryArea();
         }
+
+        #region parry
 
         void CheckIsParryable()
         {
@@ -100,5 +138,33 @@
                 r.material.color = normalColors[r];
             }
         }
+
+        #endregion
+
+        #region events
+
+        void OnBounce()
+        {
+            //play particles and sound
+            ParticlesManager.instance.Play(particlesOnBounce, transform.position, transform.rotation);
+            SoundManager.instance.Play(soundOnBounce, transform.position);
+
+            //vibrate
+            if (vibrateOnBounce)
+                Handheld.Vibrate();
+        }
+
+        void OnThrowed()
+        {
+            //play particles and sound
+            ParticlesManager.instance.Play(particlesOnThrowed, transform.position, transform.rotation);
+            SoundManager.instance.Play(soundOnThrowed, transform.position);
+
+            //vibrate
+            if (vibrateOnThrowed)
+                Handheld.Vibrate();
+        }
+
+        #endregion
     }
 }

@@ -4,7 +4,7 @@
     using UnityEngine;
     using redd096;
 
-    [AddComponentMenu("RogueBall/Balls/Ball")]
+    [AddComponentMenu("RogueBall/Ball")]
     [RequireComponent(typeof(BallGraphics))]
     public class Ball : MonoBehaviour
     {
@@ -27,6 +27,13 @@
         bool isParryable = true;
         bool bounced;
         float timerAfterCanHitOwner;
+
+        #region events
+
+        public System.Action onBounce;
+        public System.Action onThrowed;
+
+        #endregion
 
         #region to anchor at waypoint
 
@@ -104,6 +111,8 @@
             {
                 bouncedToAnchorPoint = true;
             }
+
+            onBounce?.Invoke();
         }
 
         private void FixedUpdate()
@@ -178,6 +187,8 @@
 
             //add force
             rb.AddForce(direction * force, ForceMode2D.Impulse);
+
+            onThrowed?.Invoke();
         }
     }
 }
