@@ -19,41 +19,49 @@
         [SerializeField] ParticleSystem[] particlesOnMove = default;
         [SerializeField] AudioStruct[] soundOnMove = default;
         [SerializeField] bool vibrateOnMove = false;
+        [SerializeField] bool cameraShakeOnMove = false;
 
         [Header("On End Move")]
         [SerializeField] ParticleSystem[] particlesOnEndMove = default;
         [SerializeField] AudioStruct[] soundOnEndMove = default;
         [SerializeField] bool vibrateOnEndMove = false;
+        [SerializeField] bool cameraShakeOnEndMove = false;
 
         [Header("On Get Damage")]
         [SerializeField] ParticleSystem[] particlesOnGetDamage = default;
         [SerializeField] AudioStruct[] soundOnGetDamage = default;
         [SerializeField] bool vibrateOnGetDamage = false;
+        [SerializeField] bool cameraShakeOnGetDamage = false;
 
         [Header("On Die")]
         [SerializeField] ParticleSystem[] particlesOnDie = default;
         [SerializeField] AudioStruct[] soundOnDie = default;
         [SerializeField] bool vibrateOnDie = false;
+        [SerializeField] bool cameraShakeOnDie = false;
 
         [Header("On Parry")]
         [SerializeField] ParticleSystem[] particlesOnParry = default;
         [SerializeField] AudioStruct[] soundOnParry = default;
         [SerializeField] bool vibrateOnParry = false;
+        [SerializeField] bool cameraShakeOnParry = false;
 
         [Header("On Get Parry Damage")]
         [SerializeField] ParticleSystem[] particlesOnGetParryDamage = default;
         [SerializeField] AudioStruct[] soundOnGetParryDamage = default;
         [SerializeField] bool vibrateOnGetParryDamage = false;
+        [SerializeField] bool cameraShakeOnGetParryDamage = false;
 
         [Header("On Pick Ball")]
         [SerializeField] ParticleSystem[] particlesOnPickBall = default;
         [SerializeField] AudioStruct[] soundOnPickBall = default;
         [SerializeField] bool vibrateOnPickBall = false;
+        [SerializeField] bool cameraShakeOnPickBall = false;
 
         [Header("On Throw Ball")]
         [SerializeField] ParticleSystem[] particlesOnThrowBall = default;
         [SerializeField] AudioStruct[] soundOnThrowBall = default;
         [SerializeField] bool vibrateOnThrowBall = false;
+        [SerializeField] bool cameraShakeOnThrowBall = false;
 
         #endregion
 
@@ -105,6 +113,10 @@
             //vibrate
             if (vibrateOnMove)
                 Handheld.Vibrate();
+
+            //camera shake
+            if (cameraShakeOnMove)
+                GameManager.instance.cameraShake.StartShake();
         }
 
         void OnEndMove()
@@ -116,6 +128,10 @@
             //vibrate
             if (vibrateOnEndMove)
                 Handheld.Vibrate();
+
+            //camera shake
+            if (cameraShakeOnEndMove)
+                GameManager.instance.cameraShake.StartShake();
         }
 
         void OnGetDamage()
@@ -131,6 +147,10 @@
             //vibrate
             if (vibrateOnGetDamage)
                 Handheld.Vibrate();
+
+            //camera shake
+            if (cameraShakeOnGetDamage)
+                GameManager.instance.cameraShake.StartShake();
         }
 
         void OnDie()
@@ -142,6 +162,10 @@
             //vibrate
             if (vibrateOnDie)
                 Handheld.Vibrate();
+
+            //camera shake
+            if (cameraShakeOnDie)
+                GameManager.instance.cameraShake.StartShake();
         }
 
         void OnParry()
@@ -153,6 +177,10 @@
             //vibrate
             if (vibrateOnParry)
                 Handheld.Vibrate();
+
+            //camera shake
+            if (cameraShakeOnParry)
+                GameManager.instance.cameraShake.StartShake();
         }
 
         void OnGetParryDamage()
@@ -168,6 +196,10 @@
             //vibrate
             if (vibrateOnGetParryDamage)
                 Handheld.Vibrate();
+
+            //camera shake
+            if (cameraShakeOnGetParryDamage)
+                GameManager.instance.cameraShake.StartShake();
         }
 
         void OnPickBall()
@@ -179,6 +211,10 @@
             //vibrate
             if (vibrateOnPickBall)
                 Handheld.Vibrate();
+
+            //camera shake
+            if (cameraShakeOnPickBall)
+                GameManager.instance.cameraShake.StartShake();
         }
 
         void OnThrowBall()
@@ -190,6 +226,10 @@
             //vibrate
             if (vibrateOnThrowBall)
                 Handheld.Vibrate();
+
+            //camera shake
+            if (cameraShakeOnThrowBall)
+                GameManager.instance.cameraShake.StartShake();
         }
 
         #endregion

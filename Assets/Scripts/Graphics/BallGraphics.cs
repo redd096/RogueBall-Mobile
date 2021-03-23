@@ -15,11 +15,13 @@
         [SerializeField] ParticleSystem[] particlesOnBounce = default;
         [SerializeField] AudioStruct[] soundOnBounce = default;
         [SerializeField] bool vibrateOnBounce = false;
+        [SerializeField] bool cameraShakeOnBounce = false;
 
         [Header("On Throwed")]
         [SerializeField] ParticleSystem[] particlesOnThrowed = default;
         [SerializeField] AudioStruct[] soundOnThrowed = default;
         [SerializeField] bool vibrateOnThrowed = false;
+        [SerializeField] bool cameraShakeOnThrowed = false;
 
         #endregion
 
@@ -152,6 +154,10 @@
             //vibrate
             if (vibrateOnBounce)
                 Handheld.Vibrate();
+
+            //camera shake
+            if (cameraShakeOnBounce)
+                GameManager.instance.cameraShake.StartShake();
         }
 
         void OnThrowed()
@@ -163,6 +169,10 @@
             //vibrate
             if (vibrateOnThrowed)
                 Handheld.Vibrate();
+
+            //camera shake
+            if (cameraShakeOnThrowed)
+                GameManager.instance.cameraShake.StartShake();
         }
 
         #endregion
