@@ -108,7 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  parryDamage: 100
+  parryDamage: 1000
   movingState:
     moveDiagonal: 0
     timeToRelease: 1
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6a7517f33344344cb17803c181ddf10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  force: 7
+  force: 10
   damage: 100
   isParryable: 1
 --- !u!114 &2868562055552185894
@@ -175,27 +175,35 @@ MonoBehaviour:
   particlesOnMove: []
   soundOnMove: []
   vibrateOnMove: 0
+  cameraShakeOnMove: 0
   particlesOnEndMove: []
   soundOnEndMove: []
   vibrateOnEndMove: 0
+  cameraShakeOnEndMove: 0
   particlesOnGetDamage: []
   soundOnGetDamage: []
   vibrateOnGetDamage: 0
+  cameraShakeOnGetDamage: 0
   particlesOnDie: []
   soundOnDie: []
   vibrateOnDie: 0
+  cameraShakeOnDie: 0
   particlesOnParry: []
   soundOnParry: []
   vibrateOnParry: 0
+  cameraShakeOnParry: 0
   particlesOnGetParryDamage: []
   soundOnGetParryDamage: []
   vibrateOnGetParryDamage: 0
+  cameraShakeOnGetParryDamage: 0
   particlesOnPickBall: []
   soundOnPickBall: []
   vibrateOnPickBall: 0
+  cameraShakeOnPickBall: 0
   particlesOnThrowBall: []
   soundOnThrowBall: []
   vibrateOnThrowBall: 0
+  cameraShakeOnThrowBall: 0
 --- !u!1 &3612794419057453325
 GameObject:
   m_ObjectHideFlags: 0

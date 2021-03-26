@@ -127,7 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isActive: 1
   isPlayerWaypoint: 1
-  areaParry: 0.3
+  areaParry: 0.7
 --- !u!1 &6845179241010121344
 GameObject:
   m_ObjectHideFlags: 0

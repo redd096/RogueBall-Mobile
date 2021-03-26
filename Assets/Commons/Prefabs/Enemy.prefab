@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87ab50d1916d6474fb54d4f7cb303f74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  health: 200
   parryDamage: 100
   movingState:
     timerMovement: 1
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6a7517f33344344cb17803c181ddf10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  force: 7
+  force: 15
   damage: 100
   isParryable: 1
 --- !u!114 &1215619592196949101
@@ -175,27 +175,35 @@ MonoBehaviour:
   particlesOnMove: []
   soundOnMove: []
   vibrateOnMove: 0
+  cameraShakeOnMove: 0
   particlesOnEndMove: []
   soundOnEndMove: []
   vibrateOnEndMove: 0
+  cameraShakeOnEndMove: 0
   particlesOnGetDamage: []
   soundOnGetDamage: []
   vibrateOnGetDamage: 0
+  cameraShakeOnGetDamage: 0
   particlesOnDie: []
   soundOnDie: []
   vibrateOnDie: 0
+  cameraShakeOnDie: 0
   particlesOnParry: []
   soundOnParry: []
   vibrateOnParry: 0
+  cameraShakeOnParry: 0
   particlesOnGetParryDamage: []
   soundOnGetParryDamage: []
   vibrateOnGetParryDamage: 0
+  cameraShakeOnGetParryDamage: 0
   particlesOnPickBall: []
   soundOnPickBall: []
   vibrateOnPickBall: 0
+  cameraShakeOnPickBall: 0
   particlesOnThrowBall: []
   soundOnThrowBall: []
   vibrateOnThrowBall: 0
+  cameraShakeOnThrowBall: 0
   aimLine: {fileID: 2949274770904368595}
   arrow: {fileID: 1618752700562295028}
 --- !u!1 &2010982476643809453
@@ -608,7 +616,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5111983764658762920}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
