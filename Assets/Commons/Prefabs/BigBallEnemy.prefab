@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 1215619592196949101}
   m_Layer: 0
   m_Name: BigBallEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -256,7 +256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 400
-  parryDamage: 100
+  parryDamage: 1000
   movingState:
     timerMovement: 1
     moveDiagonal: 0

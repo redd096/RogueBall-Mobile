@@ -53,7 +53,7 @@ GameObject:
   - component: {fileID: 1215619592196949101}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,13 +108,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 200
-  parryDamage: 100
+  parryDamage: 1000
   movingState:
     timerMovement: 1
     moveDiagonal: 0
     goToBallOnlyWhenStopped: 0
   throwState:
-    timerThrow: 1
+    timerThrow: 0.3
     aimAtPlayer: 1
 --- !u!114 &1618752700562295033
 MonoBehaviour:
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25755011bc8280d46a4c647c984ae358, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeMovement: 0.3
+  timeMovement: 0.2
 --- !u!114 &1618752700562295034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parryOnlyBeforeBounce: 1
   parryOnStartWaypoint: 1
-  parryOnEndWaypoint: 1
+  parryOnEndWaypoint: 0
 --- !u!114 &1618752700562295035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,9 +156,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6a7517f33344344cb17803c181ddf10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  force: 15
+  force: 12
   damage: 100
-  isParryable: 1
+  isParryable: 0
 --- !u!114 &1215619592196949101
 MonoBehaviour:
   m_ObjectHideFlags: 0

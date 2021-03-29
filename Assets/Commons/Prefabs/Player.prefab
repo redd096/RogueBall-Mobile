@@ -53,7 +53,7 @@ GameObject:
   - component: {fileID: 2868562055552185894}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32e280d527db3b64d8938935f55eaeb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  health: 200
   parryDamage: 1000
   movingState:
     moveDiagonal: 0
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25755011bc8280d46a4c647c984ae358, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeMovement: 0.3
+  timeMovement: 0.2
 --- !u!114 &791349664025087281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parryOnlyBeforeBounce: 1
   parryOnStartWaypoint: 1
-  parryOnEndWaypoint: 1
+  parryOnEndWaypoint: 0
 --- !u!114 &2818697022086744309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,7 +190,7 @@ MonoBehaviour:
   cameraShakeOnDie: 0
   particlesOnParry: []
   soundOnParry: []
-  vibrateOnParry: 0
+  vibrateOnParry: 1
   cameraShakeOnParry: 0
   particlesOnGetParryDamage: []
   soundOnGetParryDamage: []

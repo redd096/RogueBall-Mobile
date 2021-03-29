@@ -187,7 +187,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f206e5f55fe0f141a5a2d8a9dee93f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  particlesOnBounce: []
+  soundOnBounce: []
+  vibrateOnBounce: 0
+  cameraShakeOnBounce: 0
+  particlesOnThrowed: []
+  soundOnThrowed: []
+  vibrateOnThrowed: 0
+  cameraShakeOnThrowed: 0
   colorInParryArea: {r: 0, g: 1, b: 1, a: 1}
+  colorNotParryable: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &9144538271801912637
 GameObject:
   m_ObjectHideFlags: 0
