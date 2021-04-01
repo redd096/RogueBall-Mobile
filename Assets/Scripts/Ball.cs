@@ -11,7 +11,8 @@
         #region variables
 
         [Header("Important")]
-        [SerializeField] float minSpeedToDamage = 0.2f;
+        [SerializeField] bool stopAfterBounces = true;
+        [CanShow("stopAfterBounces", NOT = true)] [SerializeField] float minSpeedToDamage = 0.2f;
         [SerializeField] bool damageOnlyBeforeBounce = true;
 
         [Header("Anchor to Waypoint")]
@@ -25,7 +26,8 @@
         float damage;
         Character owner;
         bool isParryable = true;
-        bool bounced;
+        int numberBouncesBeforeStop;
+        int currentBounces;
         float timerAfterCanHitOwner;
 
         #region events
@@ -48,7 +50,7 @@
         public float Damage => damage;
         public Character Owner => owner;
         public bool IsParryable { get { return isParryable; } set { isParryable = value; } }
-        public bool Bounced => bounced;
+        public bool Bounced => currentBounces > 0;
 
         #endregion
 
@@ -59,7 +61,7 @@
 
         void OnCollisionEnter2D(Collision2D collision)
         {
-            bounced = true;
+            currentBounces++;
 
             //used for anchor point, wait bounce
             if(waitBounce)
@@ -114,7 +116,7 @@
         public bool CanHit(Character hit)
         {
             return hit != owner                                                             //or hit somebody different from owner
-                || bounced                                                                  //or can hit owner after bounce
+                || currentBounces > 0                                                       //or can hit owner after bounce
                 || (timerBeforeCanRepickBall > 0 && Time.time > timerAfterCanHitOwner);     //or after a few seconds (just for debug, if enemy throw ball too slow)
         }
 
@@ -123,17 +125,18 @@
             //check didn't hit owner 
             return owner != null && hit != owner 
                 && ( (damageOnlyBeforeBounce == false && IsSlow == false)   //and ball is not slow (if can damage also after bounce)
-                || (damageOnlyBeforeBounce && bounced == false) );          //or ball didn't bounced (if can NOT damage after bounce)
+                || (damageOnlyBeforeBounce && currentBounces <= 0) );       //or ball didn't bounced (if can NOT damage after bounce)
         }
 
-        public void Throw(float force, Vector2 direction, float damage, Character owner, bool isParryable)
+        public void Throw(float force, Vector2 direction, float damage, Character owner, bool isParryable, int numberBouncesBeforeStop)
         {
             this.damage = damage;
             this.owner = owner;
             this.isParryable = isParryable;
+            this.numberBouncesBeforeStop = numberBouncesBeforeStop;
 
             //set no bounce
-            bounced = false;
+            currentBounces = 0;
             timerAfterCanHitOwner = Time.time + timerBeforeCanRepickBall;   //for debug
 
             //reset things for anchor point

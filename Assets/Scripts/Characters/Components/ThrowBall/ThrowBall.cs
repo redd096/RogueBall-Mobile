@@ -9,6 +9,7 @@
         [Tooltip("Force throw")] [SerializeField] float force = 3;
         [SerializeField] float damage = 100;
         [SerializeField] bool isParryable = true;
+        [SerializeField] int numberBouncesBeforeStop = 2;
 
         public bool IsParryable => isParryable;
 
@@ -21,7 +22,7 @@
                 ball.gameObject.SetActive(true);
 
                 //throw ball
-                ball.Throw(force, direction, damage, character, isParryable);
+                ball.Throw(force, direction, damage, character, isParryable, numberBouncesBeforeStop);
                 character.onThrowBall?.Invoke();
 
                 return true;
