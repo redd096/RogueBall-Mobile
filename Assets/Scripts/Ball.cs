@@ -123,8 +123,9 @@
         {
             //check didn't hit owner 
             return owner != null && hit != owner 
-                && ( (damageOnlyBeforeBounce == false && IsSlow == false)   //and ball is not slow (if can damage also after bounce)
-                || (damageOnlyBeforeBounce && currentBounces <= 0) );       //or ball didn't bounced (if can NOT damage after bounce)
+                && (owner is Player && hit is Enemy || owner is Enemy && hit is Player)     //and didn't hit same team (enemy no hit enemy)
+                && ( (damageOnlyBeforeBounce == false && IsSlow == false)                   //and ball is not slow (if can damage also after bounce)
+                || (damageOnlyBeforeBounce && currentBounces <= 0) );                       //or ball didn't bounced (if can NOT damage after bounce)
         }
 
         public void Throw(float force, Vector2 direction, float damage, Character owner, bool isParryable, int numberBouncesBeforeStop)
