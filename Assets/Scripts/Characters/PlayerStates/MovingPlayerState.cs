@@ -73,6 +73,10 @@
             float absX = Mathf.Abs(delta.x);
             float absY = Mathf.Abs(delta.y);
 
+            //move only horizontal
+            if (character.MoveOnlyHorizontal)
+                absY = 0;
+
             //check dead zone
             if (absX < deadZone)
                 absX = 0;

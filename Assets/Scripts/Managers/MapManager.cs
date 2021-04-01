@@ -93,7 +93,8 @@
 
             //if there is a waypoint in these coordinates, return it
             if (mapPlayer.ContainsKey(waypointKey) && mapPlayer[waypointKey] != null && mapPlayer[waypointKey].IsActive
-                && mapPlayer[waypointKey].IsPlayerWaypoint == isPlayer)                                 //is playerWaypoint for a player, or enemyWaypoint for enemy
+                && mapPlayer[waypointKey].IsPlayerWaypoint == isPlayer                                              //is playerWaypoint for a player, or enemyWaypoint for enemy
+                && (character.MoveOnlyHorizontal == false || waypointKey.y == currentWaypoint.PositionInMap.y))     //if can move horizontal, or waypoint on same row
             {
                 return mapPlayer[waypointKey];
             }
@@ -137,7 +138,8 @@
             {
                 //if waypoint is not current waypoint and is active
                 if(waypoint != currentWaypoint && waypoint.IsActive
-                    && waypoint.IsPlayerWaypoint == isPlayer)                                           //is playerWaypoint for a player, or enemyWaypoint for enemy
+                    && waypoint.IsPlayerWaypoint == isPlayer                                                                    //is playerWaypoint for a player, or enemyWaypoint for enemy
+                    && (character.MoveOnlyHorizontal == false || waypoint.PositionInMap.y == currentWaypoint.PositionInMap.y))  //if can move horizontal, or waypoint on same row
                 {
                     possibleWaypoints.Add(waypoint);
                 }

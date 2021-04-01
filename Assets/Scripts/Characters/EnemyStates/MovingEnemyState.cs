@@ -51,9 +51,10 @@
             {
                 if(ball.ReallyStopped || (goToBallOnlyWhenStopped == false && ball.CanDamage(enemy) == false))
                 {
-                    //get its waypoint (check both player and enemy area), and be sure is an enemy waypoint
+                    //get its waypoint (check both player and enemy area)
                     Waypoint ballWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(enemy, ball.transform.position, false);
-                    if (ballWaypoint.IsPlayerWaypoint)
+                    if (ballWaypoint.IsPlayerWaypoint                                                                       //be sure is an enemy waypoint
+                        || (enemy.MoveOnlyHorizontal && ballWaypoint.PositionInMap.y != lastWaypoint.PositionInMap.y))      //be sure can move horizontal or waypoint is in same row
                         continue;
 
                     //try create path (only enemy area)

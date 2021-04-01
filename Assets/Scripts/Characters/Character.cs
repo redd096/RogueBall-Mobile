@@ -10,11 +10,13 @@
         [Header("Important")]
         [SerializeField] float health = 100;
         [Tooltip("Damage when receive parry")] [SerializeField] float parryDamage = 100;
+        [SerializeField] bool moveOnlyHorizontal = true;
 
         protected Ball currentBall;
         bool isDead;
 
         public float Health => health;
+        public bool MoveOnlyHorizontal => moveOnlyHorizontal;
 
         #region events
 

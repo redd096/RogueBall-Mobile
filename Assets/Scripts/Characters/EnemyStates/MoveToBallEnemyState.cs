@@ -61,17 +61,19 @@
 
         void SetPathToBall()
         {
-            //get ball waypoint (check both player and enemy area), and be sure is an enemy waypoint
+            lastWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(enemy, enemy.transform.position);
+
+            //get ball waypoint (check both player and enemy area)
             Waypoint ballWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(enemy, ballToReach.transform.position, false);
-            if (ballWaypoint.IsPlayerWaypoint)
+            if (ballWaypoint.IsPlayerWaypoint                                                                       //be sure is an enemy waypoint
+                || (enemy.MoveOnlyHorizontal && ballWaypoint.PositionInMap.y != lastWaypoint.PositionInMap.y))      //be sure can move horizontal or waypoint is in same row
             {
                 enemy.StopFollowBall();
                 return;
             }
 
             //try create path (only enemy area)
-            Waypoint currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(enemy, enemy.transform.position);
-            path = Pathfinding.FindPath(enemy, moveDiagonal, currentWaypoint, ballWaypoint);
+            path = Pathfinding.FindPath(enemy, moveDiagonal, lastWaypoint, ballWaypoint);
 
             //if can't reach ball, stop follow it
             if (path == null || path.Count <= 0)
