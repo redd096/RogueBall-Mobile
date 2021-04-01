@@ -52,51 +52,6 @@
 
         #endregion
 
-        #region test throw by inspector
-
-        [Header("Test Throw (direction Y axis)")]
-        [SerializeField] bool throwBall = false;
-        [SerializeField] float speedThrow = 3;
-        [SerializeField] float damageThrow = 100;
-        [SerializeField] float timer = 1;
-        [SerializeField] UnityEngine.UI.Text timerText = default;
-        Coroutine testCoroutine;
-
-        private void OnValidate()
-        {
-            //test throw ball
-            if (throwBall)
-            {
-                throwBall = false;
-
-                if (testCoroutine != null)
-                    StopCoroutine(testCoroutine);
-
-                testCoroutine = StartCoroutine(TestCoroutine());
-            }
-        }
-
-        IEnumerator TestCoroutine()
-        {
-            //init timer
-            float timeTest = Time.time + timer;
-            timerText.text = Mathf.Ceil(timeTest - Time.time).ToString("F0");
-            timerText.gameObject.SetActive(true);
-
-            while (timeTest > Time.time)
-            {
-                //set text
-                timerText.text = Mathf.Ceil(timeTest - Time.time).ToString("F0");
-                yield return null;
-            }
-
-            //remove text and throw
-            timerText.gameObject.SetActive(false);
-            Throw(speedThrow, transform.up, damageThrow, null, true);
-        }
-
-        #endregion
-
         void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
