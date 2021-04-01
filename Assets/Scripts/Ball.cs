@@ -10,11 +10,11 @@
         #region variables
 
         [Header("Important")]
-        [SerializeField] bool stopAfterBounces = true;
         [SerializeField] float minSpeedToDamage = 0.2f;
         [SerializeField] bool damageOnlyBeforeBounce = true;
 
         [Header("Anchor to Waypoint")]
+        [SerializeField] bool stopAfterBounces = true;
         [SerializeField] float maxDistanceFromCenter = 0.1f;
 
         [Header("Use for debug (0 = no use)")]
@@ -26,7 +26,7 @@
         Character owner;
         bool isParryable = true;
         int numberBouncesBeforeStop;
-        int currentBounces;
+        [ReadOnly] [SerializeField] int currentBounces = 0;
         float timerAfterCanHitOwner;
 
         #region events
