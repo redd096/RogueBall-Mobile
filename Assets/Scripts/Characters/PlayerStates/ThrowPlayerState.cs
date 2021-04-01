@@ -4,119 +4,41 @@
     using redd096;
 
     [System.Serializable]
-    public class ThrowPlayerState : State
+    public class ThrowPlayerState : MovingPlayerState
     {
-        [Tooltip("Release display before this time to get a swipe movement")] [SerializeField] float timeToRelease = 1;
-        [Tooltip("Inside this range, is not considered input")] [SerializeField] float deadZone = 100;
-
-        bool isSwiping;
-        Vector2 startSwipePosition;
-        float timeToSwipe;
-
         public ThrowPlayerState(StateMachine stateMachine) : base(stateMachine)
         {
         }
 
-        public override void Execution()
+        protected override bool CheckMoveOnlyHorizontal()
         {
-            base.Execution();
-
-            if (CheckInput() == false)
-            {
-                //if swiping but no input, stop
-                if (isSwiping)
-                    isSwiping = false;
-
-                return;
-            }
-
-            if (isSwiping == false)
-            {
-                //start swipe
-                if (InputDown())
-                {
-                    isSwiping = true;
-
-                    //save position and time
-                    startSwipePosition = InputPosition();
-                    timeToSwipe = Time.time + timeToRelease;
-                }
-            }
-            else
-            {
-                //stop swipe
-                if (InputUp())
-                {
-                    isSwiping = false;
-
-                    //if in time, check swipe (delta from start position to new position)
-                    if (timeToSwipe >= Time.time)
-                    {
-                        Swipe(InputPosition() - startSwipePosition);
-                    }
-                }
-            }
+            //do not check "move only horizontal" in CheckSwipe
+            return false;
         }
 
-        void Swipe(Vector2 movement)
+        protected override bool CheckMoveDiagonal()
         {
-            //check dead zone
-            if (movement.magnitude < deadZone)
-                return;
-
-            //throw ball
-            Character character = stateMachine as Character;
-            character.ThrowBall(movement.normalized);
-        }
-
-        #region inputs
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-
-        bool CheckInput()
-        {
-            return Input.touchCount > 0;
-        }
-
-        bool InputDown()
-        {
-            return Input.GetTouch(0).phase == TouchPhase.Began;
-        }
-
-        bool InputUp()
-        {
-            return Input.GetTouch(0).phase == TouchPhase.Ended || Input.GetTouch(0).phase == TouchPhase.Canceled;
-        }
-
-        Vector2 InputPosition()
-        {
-            return Input.GetTouch(0).position;
-        }
-
-#else
-
-        bool CheckInput()
-        {
+            //check always if swipe in diagonal
             return true;
         }
 
-        bool InputDown()
+        protected override void Swipe(Vector2Int direction)
         {
-            return Input.GetKeyDown(KeyCode.Mouse0);
+            //check dead zone - not necessary now, 'cause swipe is called only if X and Y are greater than dead zone
+            //if (swipeMovement.magnitude < deadZone)
+            //    return;
+
+            //if character can move only horizontal, and swipe only horizontal - do normal movement
+            if (character.MoveOnlyHorizontal && direction.y == 0)
+            {
+                base.Swipe(direction);
+            }
+            //if swipe is vertical or can move vertical - throw ball
+            else
+            {
+                Character character = stateMachine as Character;
+                character.ThrowBall(swipeMovement.normalized);
+            }
         }
-
-        bool InputUp()
-        {
-            return Input.GetKeyUp(KeyCode.Mouse0);
-        }
-
-        Vector2 InputPosition()
-        {
-            return Input.mousePosition;
-        }
-
-#endif
-
-        #endregion
     }
 }

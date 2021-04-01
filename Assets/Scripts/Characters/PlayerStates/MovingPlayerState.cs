@@ -9,7 +9,8 @@
         [Tooltip("Release display before this time to get a swipe movement")] [SerializeField] float timeToRelease = 1;
         [Tooltip("Inside this range, is not considered input")] [SerializeField] float deadZone = 100;
 
-        Character character;
+        protected Character character;
+        protected Vector2 swipeMovement;
 
         bool isSwiping;
         Vector2 startSwipePosition;
@@ -61,19 +62,20 @@
                     //if in time, check swipe (delta from start position to new position)
                     if (timeToSwipe >= Time.time)
                     {
-                        CheckSwipe(InputPosition() - startSwipePosition);
+                        swipeMovement = InputPosition() - startSwipePosition;
+                        CheckSwipe();
                     }
                 }
             }
         }
 
-        void CheckSwipe(Vector2 delta)
+        protected virtual void CheckSwipe()
         {
-            float absX = Mathf.Abs(delta.x);
-            float absY = Mathf.Abs(delta.y);
+            float absX = Mathf.Abs(swipeMovement.x);
+            float absY = Mathf.Abs(swipeMovement.y);
 
             //move only horizontal
-            if (character.MoveOnlyHorizontal)
+            if (CheckMoveOnlyHorizontal())
                 absY = 0;
 
             //check dead zone
@@ -90,25 +92,41 @@
             Vector2Int direction = Vector2Int.zero;
             if (absX > absY)
             {
-                direction = delta.x > Mathf.Epsilon ? Vector2Int.right : Vector2Int.left;
+                direction = swipeMovement.x > Mathf.Epsilon ? Vector2Int.right : Vector2Int.left;
 
                 //if move diagonal, add vertical if necessary
-                if (character.MoveDiagonal && absY > Mathf.Epsilon)
+                if (CheckMoveDiagonal() && absY > Mathf.Epsilon)
                 {
-                    direction.y = delta.y > Mathf.Epsilon ? 1 : -1;
+                    direction.y = swipeMovement.y > Mathf.Epsilon ? 1 : -1;
                 }
             }
             else
             {
-                direction = delta.y > Mathf.Epsilon ? Vector2Int.up : Vector2Int.down;
+                direction = swipeMovement.y > Mathf.Epsilon ? Vector2Int.up : Vector2Int.down;
 
                 //if move diagonal, add horizontal if necessary
-                if (character.MoveDiagonal && absX > Mathf.Epsilon)
+                if (CheckMoveDiagonal() && absX > Mathf.Epsilon)
                 {
-                    direction.x = delta.x > Mathf.Epsilon ? 1 : -1;
+                    direction.x = swipeMovement.x > Mathf.Epsilon ? 1 : -1;
                 }
             }
 
+            //swipe (direction using 1 and -1)
+            Swipe(direction);
+        }
+
+        protected virtual bool CheckMoveOnlyHorizontal()
+        {
+            return character.MoveOnlyHorizontal;
+        }
+
+        protected virtual bool CheckMoveDiagonal()
+        {
+            return character.MoveDiagonal;
+        }
+
+        protected virtual void Swipe(Vector2Int direction)
+        {
             //get waypoints
             Waypoint currentWaypoint = GameManager.instance.mapManager.GetNearestWaypoint(character, character.transform.position);
             Waypoint targetWaypoint = GameManager.instance.mapManager.GetWaypointInDirection(character, currentWaypoint, direction);
