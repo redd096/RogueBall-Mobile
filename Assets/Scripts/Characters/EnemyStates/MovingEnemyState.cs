@@ -9,7 +9,6 @@
     public class MovingEnemyState : State
     {
         [Tooltip("Timer between one moves and another")] [SerializeField] float timerMovement = 1;
-        [Tooltip("Can enemy move in diagonal or only horizontal and vertical?")] [SerializeField] bool moveDiagonal = false;
         [SerializeField] bool goToBallOnlyWhenStopped = true;
 
         Enemy enemy;
@@ -58,12 +57,12 @@
                         continue;
 
                     //try create path (only enemy area)
-                    List<Waypoint> ballPath = Pathfinding.FindPath(enemy, moveDiagonal, lastWaypoint, ballWaypoint);
+                    List<Waypoint> ballPath = Pathfinding.FindPath(enemy, enemy.MoveDiagonal, lastWaypoint, ballWaypoint);
 
                     //if there is a path, change state to reach the ball
                     if(ballPath != null && ballPath.Count > 0)
                     {
-                        stateMachine.SetState(new MoveToBallEnemyState(stateMachine, timerMovement, moveDiagonal, ball));
+                        stateMachine.SetState(new MoveToBallEnemyState(stateMachine, timerMovement, ball));
                         break;
                     }
                 }
@@ -75,11 +74,11 @@
             path = new List<Waypoint>();
 
             //while can't use path
-            while (path == null || path.Count <= 0 || enemy.CanMove(path[0], moveDiagonal) == false)
+            while (path == null || path.Count <= 0 || enemy.CanMove(path[0]) == false)
             {
                 //try get path to random point
                 Waypoint randomWaypoint = GameManager.instance.mapManager.GetRandomWaypoint(enemy, lastWaypoint);
-                path = Pathfinding.FindPath(enemy, moveDiagonal, lastWaypoint, randomWaypoint);
+                path = Pathfinding.FindPath(enemy, enemy.MoveDiagonal, lastWaypoint, randomWaypoint);
 
                 yield return null;
             }
@@ -101,7 +100,7 @@
                 yield return new WaitForSeconds(timerMovement);
 
                 //if move, remove waypoint from path
-                if(enemy.Move(lastWaypoint, moveDiagonal))
+                if(enemy.Move(lastWaypoint))
                 {
                     path.RemoveAt(0);
                 }

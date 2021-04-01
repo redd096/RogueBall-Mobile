@@ -10,13 +10,17 @@
         [Header("Important")]
         [SerializeField] float health = 100;
         [Tooltip("Damage when receive parry")] [SerializeField] float parryDamage = 100;
+
+        [Header("Limit Movement")]
         [SerializeField] bool moveOnlyHorizontal = true;
+        [CanShow("moveOnlyHorizontal", NOT = true)] [Tooltip("Can player move in diagonal or only horizontal and vertical?")] [SerializeField] bool moveDiagonal = false;
 
         protected Ball currentBall;
         bool isDead;
 
         public float Health => health;
         public bool MoveOnlyHorizontal => moveOnlyHorizontal;
+        public bool MoveDiagonal => moveDiagonal;
 
         #region events
 
@@ -210,17 +214,17 @@
         /// <summary>
         /// from state machine to component
         /// </summary>
-        public bool Move(Waypoint targetWaypoint, bool moveDiagonal)
+        public bool Move(Waypoint targetWaypoint)
         {
-            return CurrentMovement && CurrentMovement.Move(targetWaypoint, moveDiagonal);
+            return CurrentMovement && CurrentMovement.Move(targetWaypoint);
         }
 
         /// <summary>
         /// from state machine to component
         /// </summary>
-        public bool CanMove(Waypoint targetWaypoint, bool moveDiagonal)
+        public bool CanMove(Waypoint targetWaypoint)
         {
-            return CurrentMovement && CurrentMovement.CanMove(targetWaypoint, moveDiagonal);
+            return CurrentMovement && CurrentMovement.CanMove(targetWaypoint);
         }
 
         /// <summary>

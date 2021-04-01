@@ -63,12 +63,12 @@
             anim?.SetBool("Move", move);
         }
 
-        public abstract bool Move(Waypoint targetWaypoint, bool moveDiagonal);
+        public abstract bool Move(Waypoint targetWaypoint);
 
-        public bool CanMove(Waypoint targetWaypoint, bool moveDiagonal)
+        public bool CanMove(Waypoint targetWaypoint)
         {
             //if not current waypoint and is neighbour
-            return targetWaypoint != CurrentWaypoint && GameManager.instance.mapManager.GetNeighbours(character, moveDiagonal, CurrentWaypoint).Contains(targetWaypoint);
+            return targetWaypoint != CurrentWaypoint && GameManager.instance.mapManager.GetNeighbours(character, character.MoveDiagonal, CurrentWaypoint).Contains(targetWaypoint);
         }
     }
 }

@@ -8,7 +8,6 @@
     public class MoveToBallEnemyState : State
     {
         float timerMovement = 1;
-        bool moveDiagonal = false;
         Ball ballToReach;
 
         Enemy enemy;
@@ -17,10 +16,9 @@
         Waypoint lastWaypoint;
         List<Waypoint> path = new List<Waypoint>();
 
-        public MoveToBallEnemyState(StateMachine stateMachine, float timerMovement, bool moveDiagonal, Ball ballToReach) : base(stateMachine)
+        public MoveToBallEnemyState(StateMachine stateMachine, float timerMovement, Ball ballToReach) : base(stateMachine)
         {
             this.timerMovement = timerMovement;
-            this.moveDiagonal = moveDiagonal;
             this.ballToReach = ballToReach;
         }
 
@@ -73,7 +71,7 @@
             }
 
             //try create path (only enemy area)
-            path = Pathfinding.FindPath(enemy, moveDiagonal, lastWaypoint, ballWaypoint);
+            path = Pathfinding.FindPath(enemy, enemy.MoveDiagonal, lastWaypoint, ballWaypoint);
 
             //if can't reach ball, stop follow it
             if (path == null || path.Count <= 0)
@@ -93,7 +91,7 @@
                 yield return new WaitForSeconds(timerMovement);
 
                 //if move, remove waypoint from path
-                if (enemy.Move(lastWaypoint, moveDiagonal))
+                if (enemy.Move(lastWaypoint))
                 {
                     path.RemoveAt(0);
                 }

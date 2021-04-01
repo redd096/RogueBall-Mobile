@@ -11,12 +11,12 @@
         [Tooltip("Time to stay in new waypoint before come back to start waypoint")] [SerializeField] float timeBeforeComeBack = 0.1f;
         [Tooltip("Duration movement to come back to start waypoint")] [SerializeField] float timeComeBack = 0.3f;
 
-        public override bool Move(Waypoint targetWaypoint, bool moveDiagonal)
+        public override bool Move(Waypoint targetWaypoint)
         {
             //if no coroutine, start movement in direction
             if (movementCoroutine == null)
             {
-                if (CanMove(targetWaypoint, moveDiagonal))
+                if (CanMove(targetWaypoint))
                 {
                     movementCoroutine = StartCoroutine(MovementCoroutine(targetWaypoint));
                     return true;

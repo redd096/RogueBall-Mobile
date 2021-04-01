@@ -6,7 +6,6 @@
     [System.Serializable]
     public class MovingPlayerState : State
     {
-        [Tooltip("Can player move in diagonal or only horizontal and vertical?")] [SerializeField] bool moveDiagonal = false;
         [Tooltip("Release display before this time to get a swipe movement")] [SerializeField] float timeToRelease = 1;
         [Tooltip("Inside this range, is not considered input")] [SerializeField] float deadZone = 100;
 
@@ -94,7 +93,7 @@
                 direction = delta.x > Mathf.Epsilon ? Vector2Int.right : Vector2Int.left;
 
                 //if move diagonal, add vertical if necessary
-                if (moveDiagonal && absY > Mathf.Epsilon)
+                if (character.MoveDiagonal && absY > Mathf.Epsilon)
                 {
                     direction.y = delta.y > Mathf.Epsilon ? 1 : -1;
                 }
@@ -104,7 +103,7 @@
                 direction = delta.y > Mathf.Epsilon ? Vector2Int.up : Vector2Int.down;
 
                 //if move diagonal, add horizontal if necessary
-                if (moveDiagonal && absX > Mathf.Epsilon)
+                if (character.MoveDiagonal && absX > Mathf.Epsilon)
                 {
                     direction.x = delta.x > Mathf.Epsilon ? 1 : -1;
                 }
@@ -115,7 +114,7 @@
             Waypoint targetWaypoint = GameManager.instance.mapManager.GetWaypointInDirection(character, currentWaypoint, direction);
 
             //swipe (direction using 1 and -1)
-            character.Move(targetWaypoint, moveDiagonal);
+            character.Move(targetWaypoint);
         }
 
         #region inputs

@@ -9,12 +9,12 @@
         [Header("Hybrid")]
         [Tooltip("Duration movement from one waypoint to another")] [SerializeField] float timeMovement = 0.3f;
 
-        public override bool Move(Waypoint targetWaypoint, bool moveDiagonal)
+        public override bool Move(Waypoint targetWaypoint)
         {
             //if no coroutine, start movement in direction
             if (movementCoroutine == null)
             {
-                if (CanMove(targetWaypoint, moveDiagonal))
+                if (CanMove(targetWaypoint))
                 {
                     movementCoroutine = StartCoroutine(MovementCoroutine(targetWaypoint));
                     return true;
