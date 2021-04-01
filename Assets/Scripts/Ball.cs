@@ -1,6 +1,5 @@
 ﻿namespace RogueBall
 {
-    using System.Collections;
     using UnityEngine;
     using redd096;
 
@@ -12,7 +11,7 @@
 
         [Header("Important")]
         [SerializeField] bool stopAfterBounces = true;
-        [CanShow("stopAfterBounces", NOT = true)] [SerializeField] float minSpeedToDamage = 0.2f;
+        [SerializeField] float minSpeedToDamage = 0.2f;
         [SerializeField] bool damageOnlyBeforeBounce = true;
 
         [Header("Anchor to Waypoint")]
@@ -79,8 +78,8 @@
             if(showSpeed)
                 Debug.Log("ball speed: " + rb.velocity.magnitude.ToString("F2"));
 
-            //if slow
-            if(IsSlow)
+            //if slow, or reached number of bounces
+            if(IsSlow || (stopAfterBounces && currentBounces >= numberBouncesBeforeStop))
             {
                 //if too much distant from waypoint
                 if (Vector3.Distance(transform.position, currentWaypoint.transform.position) > maxDistanceFromCenter)
@@ -144,7 +143,8 @@
             bouncedToAnchorPoint = false;
 
             //add force
-            rb.AddForce(direction * force, ForceMode2D.Impulse);
+            rb.velocity = direction * force;
+            //rb.AddForce(direction * force, ForceMode2D.Impulse);
 
             onThrowed?.Invoke();
         }
